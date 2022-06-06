@@ -1,9 +1,9 @@
-import type { BlogSection } from '$lib/db';
+import type { prisma } from '$lib/db';
 import { client } from '$lib/db';
 import { isModelName, modelErrors } from '$lib/components';
 import type { RequestHandler } from '@sveltejs/kit';
 
-export const get: RequestHandler<never, { blogSections: BlogSection[] }> = async ({
+export const get: RequestHandler<never, { blogSections: prisma.BlogSection[] }> = async ({
   params: { blogId }
 }) => ({
   body: { blogSections: await client.blogSection.findMany({ where: { blogId: parseInt(blogId) } }) }
@@ -38,4 +38,5 @@ export const post: RequestHandler<{ blogId: string }, string> = async ({
   if (blogSection) {
     return { status: 302, headers: { location: `/api/blogs/${slug}` } };
   }
+  return { status: 500, body: 'Can not create this blog section' };
 };

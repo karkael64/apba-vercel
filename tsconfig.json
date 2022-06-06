@@ -1,7 +1,7 @@
 {
   "extends": "./.svelte-kit/tsconfig.json",
   "include": ["src"],
-  "exclude": ["src/components/common/colors.js", "src/hooks.js", "src/prisma/build"],
+  "exclude": ["src/components/common/colors.js", "src/hooks.js"],
   "compilerOptions": {
     "allowJs": true,
     "checkJs": true,

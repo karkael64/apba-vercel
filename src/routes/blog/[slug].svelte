@@ -12,9 +12,9 @@
 </script>
 
 <script lang="ts">
-	import type { Blog, BlogSection } from '$lib/db';
+	import type { prisma } from '$lib/db';
 	import { SectionThumbs, SectionSplash } from '$lib/components';
-	export let blog: null | Blog & { sections: BlogSection[] };
+	export let blog: null | prisma.Blog & { sections: prisma.BlogSection[] };
 </script>
 
 <div>
@@ -22,10 +22,13 @@
 	<p>{blog?.body}</p>
 </div>
 
-{#each blog?.sections as section (section.id)}
-	{#if section.model === "SectionThumbs"}
-		<SectionThumbs {...JSON.parse(section.json)} />
-	{:else if section.model === "SectionSplash"}
-		<SectionSplash {...JSON.parse(section.json)} />
-	{/if}
-{/each}
+{#if blog?.sections}
+	{#each blog.sections as section (section.id)}
+		{#if section.model === "SectionThumbs"}
+			<SectionThumbs {...JSON.parse(section.json)} />
+		{:else if section.model === "SectionSplash"}
+			<SectionSplash {...JSON.parse(section.json)} />
+		{/if}
+	{/each}
+{/if}
+
