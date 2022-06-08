@@ -11,7 +11,7 @@
     "lint": "prettier --check --plugin-search-dir=. .",
     "format": "prettier --write --plugin-search-dir=. .",
     "postinstall": "prisma generate --schema=./src/prisma/schema.prisma",
-    "clean": "rm -rf .svelte-kit; rm -rf src/lib/prismaBuild"
+    "clean": "rm -rf .svelte-kit; rm -rf node_modules"
   },
   "devDependencies": {
     "@prisma/client": "^3.14.0",

@@ -5,7 +5,7 @@
 	import { objectReduce } from "../../common/object";
 	import { colorScheme } from "./colorScheme";
 
-	export let defaultColorScheme: "light" | "dark" = undefined;
+	export let defaultColorScheme: "light" | "dark" | undefined = undefined;
 
 	let el: HTMLStyleElement;
 
@@ -16,12 +16,13 @@
 
 	onMount(() => {
 		colorScheme.subscribe((value) => {
-			if (!el) {
+			if (!el || !el.sheet) {
 				return;
 			}
 			if (index !== undefined) {
 				el.sheet.deleteRule(index);
 			}
+			el.parentNode?.appendChild(el);
 			if (value === "light") {
 				index = el.sheet.insertRule(`:root {${colorsToCssVar(light)}\n}`);
 				localStorage.setItem("color-scheme", "light");
