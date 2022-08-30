@@ -12,7 +12,7 @@
 	height="80vh"
 	buttonList={[
 		{ href: '/blog/parents', text: "Vous êtes un parent du Bois l'Abbé", color: 'primary' },
-		{ href: '/login', text: 'Vous êtes déjà inscrit', color: 'secondary' }
+		{ href: '/login', text: 'Vous êtes déjà inscrit', color: 'secondary' },
 	]}
 	body={`
 	<h1>

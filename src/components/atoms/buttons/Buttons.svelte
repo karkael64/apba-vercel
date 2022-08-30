@@ -17,10 +17,11 @@
 <style>
 	.buttons {
 		display: flex;
-		position: absolute;
-		right: -5em;
-		bottom: -2em;
+		justify-content: stretch;
+		align-items: stretch;
 		color: var(--negative);
+		border-radius: .5em;
+		overflow: hidden;
 	}
 
 	.button {
@@ -40,6 +41,7 @@
 		font-size: 1rem;
 		font-weight: 700;
 		line-height: 1;
+		white-space: nowrap;
 
 		transition: all 0.2s;
 	}
@@ -56,13 +58,13 @@
 		background: var(--secondary);
 	}
 
-	.buttons > *:first-child {
-		border-top-left-radius: 0.5em;
-		border-bottom-left-radius: 0.5em;
-	}
+	@media only screen and (max-width: 999px) {
+		.buttons {
+			flex-direction: column;
+		}
 
-	.buttons > *:last-child {
-		border-top-right-radius: 0.5em;
-		border-bottom-right-radius: 0.5em;
+		.button {
+			width: auto;
+		}
 	}
 </style>

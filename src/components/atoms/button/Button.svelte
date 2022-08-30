@@ -1,7 +1,7 @@
 <script lang="ts">
 	export let color = "secondary";
 	export let shape = "round";
-	export let href: string = undefined;
+	export let href: string | undefined = undefined;
 </script>
 
 {#if href}

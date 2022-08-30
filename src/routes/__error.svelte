@@ -4,7 +4,7 @@
 		if (status === 404) {
 			return { props: { title: "La page n'existe pas" } };
 		}
-		return { props: { title: `${error.message}` } };
+		return { props: { title: `${error?.message}` } };
 	}
 </script>
 

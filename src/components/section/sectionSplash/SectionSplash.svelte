@@ -1,47 +1,70 @@
 <script lang="ts">
-	import type { ButtonProps } from "../../atoms/buttons/Buttons.svelte";
-	import Buttons from "../../atoms/buttons/Buttons.svelte";
-	import FullSection from "../../layout/fullSection/FullSection.svelte";
-	import { ImageLoader } from "../../molecule";
+import type { ButtonProps } from '../../atoms/buttons/Buttons.svelte';
+import Buttons from '../../atoms/buttons/Buttons.svelte';
+import FullSection from '../../layout/fullSection/FullSection.svelte';
+import { ImageLoader } from '../../molecule';
 
-	export let buttonList: ButtonProps[];
-	export let backgroundImages: string[];
-	export let height = "80vh";
-	export let body = "";
-	export let variant = "";
+export let buttonList: ButtonProps[];
+export let backgroundImages: string[];
+export let height = '80vh';
+export let body = '';
+export let variant = '';
 </script>
 
-<FullSection {height}>
-	<div class="split-background">
-		{#each backgroundImages as backgroundImage}
-			<ImageLoader src={backgroundImage} alt="" />
-		{/each}
-	</div>
-	<div class={`splash ${variant}`}>
-		{@html body}
-		<Buttons list={buttonList} />
-	</div>
+<FullSection height="{height}">
+  <div class="split-background">
+    {#each backgroundImages as backgroundImage}
+      <ImageLoader src="{backgroundImage}" alt="" />
+    {/each}
+  </div>
+  <div class="{`splash ${variant}`}">
+    {@html body}
+		<div class="splash-button">
+			<Buttons list="{buttonList}" />
+		</div>
+  </div>
 </FullSection>
 
 <style>
-	.splash {
-		position: absolute;
-		bottom: 5em;
-		right: 10em;
-		background: linear-gradient(var(--negative), var(--minus));
-		color: var(--positive);
-		width: 40em;
-		padding: 2em 3em;
-		border-radius: 1em;
-	}
+.splash {
+	position: absolute;
+	bottom: 5em;
+	background: linear-gradient(var(--negative), var(--minus));
+	color: var(--positive);
+	padding: 2em 3em;
+	margin: 5em 5%;
+	border-radius: 1em;
+}
 
-	.splash.left {
-		left: 10em;
-		right: auto;
-	}
+.split-background {
+	display: flex;
+	height: 100%;
+}
 
-	.split-background {
-		display: flex;
-		height: 100%;
+.splash-button {
+	position: absolute;
+}
+
+@media only screen and (min-width: 1000px) {
+  .splash {
+    right: 10em;
+		margin: 0;
+    padding: 2em 3em;
+    border-radius: 1em;
+  }
+
+  .splash.left {
+    left: 10em;
+    right: auto;
+  }
+
+  .split-background {
+    display: flex;
+    height: 100%;
+  }
+
+	.splash-button {
+		right: -5em;
 	}
+}
 </style>

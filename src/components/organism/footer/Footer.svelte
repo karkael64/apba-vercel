@@ -34,10 +34,20 @@
 		width: 60em;
 	}
 
+	a:hover {
+		border-bottom: 1px solid currentColor;
+	}
 	a.bottom {
 		color: var(--sinopia);
 	}
 	a.bottom:hover {
 		border-bottom: 1px solid currentColor;
+	}
+
+	@media only screen and (max-width: 999px) {
+		ul {
+			column-count: 1;
+			width: 100%;
+		}
 	}
 </style>
