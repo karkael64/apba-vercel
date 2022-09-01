@@ -31,14 +31,13 @@
 			body: `
 		<h2>Parents</h2>
 		<p>
-			Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nam sapiente omnis, asperiores esse
-			obcaecati voluptate ut unde dolorum, non perspiciatis totam autem laborum sequi mollitia quia
-			tempore consectetur officia? Ex?
+			Bienvenue chers parents ! Nous vous accueillons dans nos locaux en plein coeur du Bois l'Abbé,
+			auprès des autres parents et de professionnels. Venez avec vos enfants passer un bon moment,
+			découvrir nos activités et rencontrer plein de gens.
 		</p>
 		<p>
-			Lorem ipsum, dolor sit amet consectetur adipisicing elit. Provident mollitia assumenda quos, a
-			velit commodi expedita hic blanditiis neque ex at sint quis labore illo in iste fuga nostrum
-			eveniet?
+			En cliquant sur ce bouton, vous découvrirez ce que nous pouvons vous apporter, et ce qui importe
+			le plus dans cette association.
 		</p>`
 		},
 		{
@@ -49,9 +48,14 @@
 			body: `
 		<h2>Habitants du Bois l'Abbé</h2>
 		<p>
-			Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae, voluptatibus explicabo. Odio
-			non nisi quibusdam aliquam nam voluptas, itaque consequatur. Excepturi reiciendis nihil, minus
-			ipsam natus laboriosam fuga impedit ut.
+			Nos locaux sont au coeur du Bois l'Abbé de Champigny-sur-Marne, c'est un quartier vivant avec ses
+			belles histoires et ses rencontres. Vous connaissez déjà le quartier pour ses habitants intègres
+			et courtois, nous vous proposons de nous rejoindre dans nos locaux et durant nos activités.
+		</p>
+		<p>
+			Vous trouverez toutes les raisons de venir nous voir : vous êtes parents, vous êtes un habitant
+			qui veut connaitre son environnement, vous venez d'arriver dans le quartier, vous êtes concerné
+			par le développement du quartier... Nous vous accueillerons à bras ouverts !
 		</p>`
 		}
 	]}
@@ -78,9 +82,14 @@
 			body: `
 		<h2>Diététique et bien-être</h2>
 		<p>
-			Lorem ipsum dolor, sit amet consectetur adipisicing elit. Reprehenderit aliquam modi amet!
-			Aspernatur nemo, quidem quod saepe nesciunt tempore, dolor laboriosam sint fugiat possimus
-			labore quis eligendi? Cumque, libero eum.
+			Avec nos professionnels dans les locaux et dans les activités, vous retrouverez plein d'informations
+			autour du bien-être et de la diététique. Nous organisons des thématiques pour passer en revue les
+			plats tendances, innover avec vos astuces et échanger avec les membres de l'association.
+		</p>
+		<p>
+			Les professionnels sur place peuvent guider des activités de cuisine, proposer des ingrédients qui
+			améliore la santé, ou encore choisir avec vous des ingrédients qui vous font du bien, à vous ainsi que
+			les familles.
 		</p>`
 		},
 		{
@@ -91,14 +100,13 @@
 			body: `
 		<h2>Activités en famille</h2>
 		<p>
-			Lorem ipsum dolor sit, amet consectetur adipisicing elit. Necessitatibus voluptate, quod quo
-			tempore at quasi repellendus quis sit nihil reprehenderit blanditiis maiores, odit ullam
-			repellat aliquam, veniam perferendis similique dolore?
+			Nous sommes heureux d'accueillir toutes les semaines des parents, des enfants et souvent des familles
+			entières. C'est l'occasion d'échanger entre toutes les générations, autour d'activités, de repas et
+			surtout de nombreux ateliers.
 		</p>
 		<p>
-			Lorem ipsum dolor sit, amet consectetur adipisicing elit. Alias aut perspiciatis sequi neque?
-			Magnam, aut eum mollitia deleniti dolorum quasi eos dolor, quibusdam ab doloremque culpa totam
-			nisi cum in!
+			Nous acceuillons les familles tous les mercredis pour des activités en après-midi et tous les vendredis
+			pour des journées autour des jeux de société.
 		</p>`
 		}
 	]}

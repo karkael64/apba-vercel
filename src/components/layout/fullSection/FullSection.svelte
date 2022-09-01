@@ -3,9 +3,9 @@
 	import { objectToStyleString } from "../../common/style";
 	import ImageLoader from "../../molecule/imageLoader/ImageLoader.svelte";
 
-	export let backgroundImage: string = undefined;
-	export let backgroundFilter: string = undefined;
-	export let height: string = undefined;
+	export let backgroundImage: string | undefined = undefined;
+	export let backgroundFilter: string | undefined = undefined;
+	export let height: string | undefined = undefined;
 
 	$: styles = { height } as CSSObject;
 </script>
@@ -22,6 +22,9 @@
 <style>
 	section {
 		position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 		width: 100%;
 		height: 100vh;
 	}

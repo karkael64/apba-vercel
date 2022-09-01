@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { CarrouselPicture } from "$lib/components";
-  import { Carrousel, FullSection } from "$lib/components";
+  import { Carrousel, SectionPlain } from "$lib/components";
   const pictures: CarrouselPicture[] = [
     { alt: "", src: "/parents/famille.jpg" },
     { alt: "", src: "/equipe/benevoles.jpg" },
@@ -11,7 +11,7 @@
   ];
 </script>
 
-<FullSection height="60vh">
+<SectionPlain>
   <h1>
     Parents du Bois l'Abbé
   </h1>
@@ -41,6 +41,6 @@
   <p>
     L'association accueille les parents, et nous avons bien compris qu'après les échanges, nous avons besoin d'activités, et qui s'adapte au besoin de chaque personne. Vous trouverez dans l'agenda beaucoup d'activités : jeux de société parents-enfants, ateliers cuisine, ateliers bien-être, ateliers informatiques.
   </p>
-</FullSection>
+</SectionPlain>
 
 <Carrousel height="60vh" duration={2000} {pictures} />
