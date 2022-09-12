@@ -4,7 +4,7 @@ export let number: number;
 export let weak: boolean = false;
 </script>
 
-<div class="{`day ${pin ? '' : 'hidePin'} ${weak ? 'week' : ''}`}" on:click>
+<div class="{`day ${pin ? '' : 'hidePin'} ${weak ? 'weak' : ''}`}" on:click>
   <span class="number">{number}</span>
   <span class="pin"></span>
 </div>
@@ -40,5 +40,9 @@ export let weak: boolean = false;
   width: 1.5em;
   height: 1.2em;
   text-align: center;
+}
+
+.weak {
+  opacity: 0.4;
 }
 </style>

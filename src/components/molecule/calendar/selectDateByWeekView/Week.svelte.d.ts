@@ -1,3 +1,4 @@
+import type { SvelteEvent } from 'src/components/common/ambient';
 import { SvelteComponentTyped } from 'svelte';
 
 declare class Week extends SvelteComponentTyped<
@@ -8,7 +9,7 @@ declare class Week extends SvelteComponentTyped<
     firstWeekDate: Date;
   },
   {
-    click: Date;
+    click: SvelteEvent<Date>;
     previous: Event;
     next: Event;
   }

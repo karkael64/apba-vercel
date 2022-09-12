@@ -1,5 +1,5 @@
 <script lang="ts">
-import { Agenda } from '$lib/components';
+import { Calendar } from '$lib/components';
 </script>
 
-<Agenda />
+<Calendar on:click="{console.log}" />

@@ -1,16 +1,17 @@
+import type { SvelteEvent } from 'src/components/common/ambient';
 import { SvelteComponentTyped } from 'svelte';
 
 type View = 'date' | 'week' | 'month' | 'year';
 
-declare class Agenda extends SvelteComponentTyped<
+declare class Calendar extends SvelteComponentTyped<
   {
     originView?: View;
     date?: Date;
     events?: Date[];
   },
   {
-    click: Date;
+    click: SvelteEvent<Date>;
   }
 > {}
 
-export default Agenda;
+export default Calendar;

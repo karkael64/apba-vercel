@@ -7,28 +7,31 @@ export let events: Date[];
 export let year: number;
 export let month: number;
 
-const monthEvents = events.filter(
-  (date) => date.getFullYear() === year && date.getMonth() === month
-);
+let monthEvents: Date[];
+let firstDate: Date;
+let monthDays: Date[];
+$: {
+  monthEvents = events.filter((date) => date.getFullYear() === year && date.getMonth() === month);
 
-const firstDate = new Date(year, month, 1);
-firstDate.setDate(firstDate.getDate() - (firstDate.getDay() ? firstDate.getDay() - 1 : 6));
+  firstDate = new Date(year, month, 1);
+  firstDate.setDate(firstDate.getDate() - (firstDate.getDay() ? firstDate.getDay() - 1 : 6));
 
-const monthDays = Array.from({ length: 35 }, (_, index): Date => {
-  const date = new Date(firstDate);
-  date.setDate(firstDate.getDate() + index);
-  return date;
-});
+  monthDays = Array.from({ length: 42 }, (_, index): Date => {
+    const date = new Date(firstDate);
+    date.setDate(firstDate.getDate() + index);
+    return date;
+  });
+}
+
+const dispatch = createEventDispatcher();
 
 const monthDayClick = (date: Date) => () => dispatch('click', date);
 const previousMonthClick = () => dispatch('previous');
 const nextMonthClick = () => dispatch('next');
 
-const dispatch = createEventDispatcher();
-
 const displayPin = (date: Date) => {
   const matchDate = dateToString(date);
-  return !!monthDays.find((ev) => dateToString(ev) === matchDate);
+  return !!monthEvents.find((ev) => dateToString(ev) === matchDate);
 };
 
 const getMonthName = (month: number) => {
@@ -59,8 +62,6 @@ const getMonthName = (month: number) => {
       return 'Décembre';
   }
 };
-
-console.log({ events, year, month, firstDate });
 </script>
 
 <div class="month">
@@ -77,14 +78,15 @@ console.log({ events, year, month, firstDate });
   </div>
   <div class="weeks">
     {#each monthDays as date}
+      {@const dateYear = date.getFullYear()}
       <div>
-        {#if date.getFullYear() < year || date.getMonth() < month}
+        {#if dateYear < year || (dateYear === year && date.getMonth() < month)}
           <Day
             number="{date.getDate()}"
             pin="{displayPin(date)}"
             on:click="{previousMonthClick}"
             weak />
-        {:else if date.getFullYear() > year || date.getMonth() > month}
+        {:else if dateYear > year || (dateYear === year && date.getMonth() > month)}
           <Day
             number="{date.getDate()}"
             pin="{displayPin(date)}"
@@ -136,7 +138,9 @@ console.log({ events, year, month, firstDate });
 }
 
 .week-days > span {
+  margin-top: 0.5em;
   margin-right: 0.5em;
+  margin-bottom: 0.5em;
   flex-grow: 0;
   flex-shrink: 0;
   flex-basis: calc(100% / 7 - 0.5em);

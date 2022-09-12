@@ -1,3 +1,4 @@
+import type { SvelteEvent } from 'src/components/common/ambient';
 import { SvelteComponentTyped } from 'svelte';
 
 declare class Month extends SvelteComponentTyped<
@@ -7,7 +8,7 @@ declare class Month extends SvelteComponentTyped<
     month: number;
   },
   {
-    click: Date;
+    click: SvelteEvent<Date>;
     edityear: Event;
     editmonth: Event;
     previous: Event;
