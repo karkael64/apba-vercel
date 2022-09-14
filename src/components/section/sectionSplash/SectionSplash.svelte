@@ -1,8 +1,9 @@
 <script lang="ts">
+import Markdown from '../../molecule/markdown/Markdown.svelte';
 import type { ButtonProps } from '../../atoms/buttons/Buttons.svelte';
 import Buttons from '../../atoms/buttons/Buttons.svelte';
 import FullSection from '../../layout/fullSection/FullSection.svelte';
-import { ImageLoader } from '../../molecule';
+import ImageLoader from '../../molecule/imageLoader/ImageLoader.svelte';
 
 export let buttonList: ButtonProps[];
 export let backgroundImages: string[];
@@ -18,37 +19,37 @@ export let variant = '';
     {/each}
   </div>
   <div class="{`splash ${variant}`}">
-    {@html body}
-		<div class="splash-button">
-			<Buttons list="{buttonList}" />
-		</div>
+    <Markdown content="{body}" />
+    <div class="splash-button">
+      <Buttons list="{buttonList}" />
+    </div>
   </div>
 </FullSection>
 
 <style>
 .splash {
-	position: absolute;
-	bottom: 5em;
-	background: linear-gradient(var(--negative), var(--minus));
-	color: var(--positive);
-	padding: 2em 3em;
-	margin: 5em 5%;
-	border-radius: 1em;
+  position: absolute;
+  bottom: 5em;
+  background: linear-gradient(var(--negative), var(--minus));
+  color: var(--positive);
+  padding: 2em 3em;
+  margin: 5em 5%;
+  border-radius: 1em;
 }
 
 .split-background {
-	display: flex;
-	height: 100%;
+  display: flex;
+  height: 100%;
 }
 
 .splash-button {
-	position: absolute;
+  position: absolute;
 }
 
 @media only screen and (min-width: 1000px) {
   .splash {
     right: 10em;
-		margin: 0;
+    margin: 0;
     padding: 2em 3em;
     border-radius: 1em;
   }
@@ -63,8 +64,8 @@ export let variant = '';
     height: 100%;
   }
 
-	.splash-button {
-		right: -5em;
-	}
+  .splash-button {
+    right: -5em;
+  }
 }
 </style>
