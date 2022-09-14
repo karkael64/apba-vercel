@@ -20,4 +20,4 @@ export const hasOptionalBetween = <T extends AnyObject, K extends string, S>(
   el: T,
   key: K,
   values: readonly S[]
-): el is T & { [k in K]?: S } => !(key in el) || values.includes(el[key]);
+): el is T & { [k in K]?: S } => !(key in el) || values.includes(el[key] as S);

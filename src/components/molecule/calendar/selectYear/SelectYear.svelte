@@ -6,13 +6,16 @@ export let year: number = 1970;
 const dispatch = createEventDispatcher();
 const currentYear = new Date().getFullYear();
 
-const years = Array.from({ length: 20 }, (_, index) => currentYear + index - 10);
+const years = Array.from({ length: 40 }, (_, index) => currentYear + index - 20);
 
 let scroller: HTMLDivElement;
 
 onMount(() => {
-  const itemHeight = scroller.firstElementChild?.clientHeight ?? 24;
-  const scrollTop = Math.min(itemHeight * (year - currentYear) + itemHeight * 8);
+  const item = Array.prototype.find.call(
+    scroller.children,
+    (child: Element) => child.textContent === year.toString()
+  );
+  const scrollTop = item.offsetTop - (scroller.clientHeight - item.clientHeight) / 2;
   scroller.scrollTo({ top: scrollTop, behavior: 'smooth' });
 });
 </script>
@@ -25,15 +28,18 @@ onMount(() => {
 
 <style>
 .scroll {
-  height: 7.5rem;
+  position: relative;
   overflow-x: clip;
   overflow-y: scroll;
   text-align: center;
+  width: 100%;
+  height: 100%;
+  box-shadow: inset 0 0 20px var(--negative);
 }
 
 .scroll > div {
-  height: 1.5rem;
-  line-height: 1.5rem;
+  height: 1.5em;
+  line-height: 1.5em;
   cursor: pointer;
 }
 

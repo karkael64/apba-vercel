@@ -39,8 +39,12 @@ const months = Array.from({ length: 12 });
 let scroller: HTMLDivElement;
 
 onMount(() => {
-  const itemHeight = scroller.firstElementChild?.clientHeight ?? 24;
-  const scrollTop = Math.min(itemHeight * month - itemHeight * 2);
+  const monthName = getMonthName(month);
+  const item = Array.prototype.find.call(
+    scroller.children,
+    (child: Element) => child.textContent === monthName
+  );
+  const scrollTop = item.offsetTop - (scroller.clientHeight - item.clientHeight) / 2;
   scroller.scrollTo({ top: scrollTop, behavior: 'smooth' });
 });
 </script>
@@ -53,15 +57,17 @@ onMount(() => {
 
 <style>
 .scroll {
-  height: 7.5rem;
+  position: relative;
   overflow-x: clip;
   overflow-y: scroll;
   text-align: center;
+  width: 100%;
+  height: 100%;
 }
 
 .scroll > div {
-  height: 1.5rem;
-  line-height: 1.5rem;
+  height: 1.5em;
+  line-height: 1.5em;
   cursor: pointer;
 }
 

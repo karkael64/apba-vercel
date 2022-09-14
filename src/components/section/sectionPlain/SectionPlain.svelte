@@ -1,5 +1,5 @@
 <script>
-  import { FullSection } from '../../layout';
+import { FullSection } from '../../layout';
 </script>
 
 <FullSection height="auto">
@@ -9,9 +9,9 @@
 </FullSection>
 
 <style>
-  .pad {
-    max-width: 50vw;
-    padding: 2rem;
-    flex-direction: column;
-  }
+.pad {
+  max-width: 50vw;
+  padding: 2em;
+  flex-direction: column;
+}
 </style>

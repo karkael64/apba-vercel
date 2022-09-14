@@ -1,5 +1,9 @@
 import * as cookie from 'cookie';
 
+/**
+ * @param {number} length
+ * @returns {string}
+ */
 const genHexa = (length) => {
   let hexa = '';
   while (hexa.length < length) {

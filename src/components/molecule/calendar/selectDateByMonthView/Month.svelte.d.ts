@@ -6,6 +6,7 @@ declare class Month extends SvelteComponentTyped<
     events: Date[];
     year: number;
     month: number;
+    isWeekStartingWithSunday?: true;
   },
   {
     click: SvelteEvent<Date>;

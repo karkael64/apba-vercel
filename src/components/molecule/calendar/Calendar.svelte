@@ -67,10 +67,18 @@ const onChangeView = (view: View) => () => {
 
 <style>
 .calendar {
+  font-size: 1rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   width: 20em;
+  height: 18em;
   padding: 1em;
   border: 1px solid var(--minus);
   border-radius: 0.5em;
+
   user-select: none;
 }
 </style>

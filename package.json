@@ -33,6 +33,7 @@
     "@tsconfig/svelte": "^3.0.0",
     "@types/cookie": "^0.4.1",
     "@types/faker": "5.5.3",
+    "@types/markdown-it": "^12.2.3",
     "@typescript-eslint/eslint-plugin": "^5.27.1",
     "@typescript-eslint/parser": "^5.27.1",
     "babel-loader": "^8.2.5",
@@ -50,6 +51,7 @@
     "@fontsource/fira-mono": "^4.5.0",
     "cookie": "^0.4.1",
     "json-schema": "^0.4.0",
+    "markdown-it": "^13.0.1",
     "prisma": "^3.14.0",
     "svelte-i18n": "^3.4.0"
   }

@@ -1,11 +1,12 @@
 <script lang="ts">
-import { dateToString } from '../../../common/date';
+import { dateToString, getMonthName } from '../../../common/date';
 import { createEventDispatcher } from 'svelte';
 import Day from './Day.svelte';
 
 export let events: Date[];
 export let year: number;
 export let month: number;
+export let isWeekStartingWithSunday = false;
 
 let monthEvents: Date[];
 let firstDate: Date;
@@ -14,7 +15,12 @@ $: {
   monthEvents = events.filter((date) => date.getFullYear() === year && date.getMonth() === month);
 
   firstDate = new Date(year, month, 1);
-  firstDate.setDate(firstDate.getDate() - (firstDate.getDay() ? firstDate.getDay() - 1 : 6));
+  firstDate.setDate(
+    firstDate.getDate() -
+      (firstDate.getDay() ? firstDate.getDay() : 7) +
+      (isWeekStartingWithSunday ? 0 : 1)
+  );
+  if (firstDate.getDate() === 1) firstDate.setDate(-6);
 
   monthDays = Array.from({ length: 42 }, (_, index): Date => {
     const date = new Date(firstDate);
@@ -33,48 +39,24 @@ const displayPin = (date: Date) => {
   const matchDate = dateToString(date);
   return !!monthEvents.find((ev) => dateToString(ev) === matchDate);
 };
-
-const getMonthName = (month: number) => {
-  switch (month) {
-    case 0:
-      return 'Janvier';
-    case 1:
-      return 'Février';
-    case 2:
-      return 'Mars';
-    case 3:
-      return 'Avril';
-    case 4:
-      return 'Mai';
-    case 5:
-      return 'Juin';
-    case 6:
-      return 'Juillet';
-    case 7:
-      return 'Août';
-    case 8:
-      return 'Septembre';
-    case 9:
-      return 'Octobre';
-    case 10:
-      return 'Novembre';
-    default:
-      return 'Décembre';
-  }
-};
 </script>
 
 <div class="month">
   <div class="year-selector" on:click="{() => dispatch('edityear')}">{year}</div>
   <div class="month-selector" on:click="{() => dispatch('editmonth')}">{getMonthName(month)}</div>
   <div class="week-days">
+    {#if isWeekStartingWithSunday}
+      <span class="weak" title="Dimanche">D</span>
+    {/if}
     <span title="Lundi">L</span>
     <span title="Mardi">Ma</span>
     <span title="Mercredi">Me</span>
     <span title="Jeudi">J</span>
     <span title="Vendredi">V</span>
     <span class="weak" title="Samedi">S</span>
-    <span class="weak" title="Dimanche">D</span>
+    {#if !isWeekStartingWithSunday}
+      <span class="weak" title="Dimanche">D</span>
+    {/if}
   </div>
   <div class="weeks">
     {#each monthDays as date}
@@ -107,8 +89,6 @@ const getMonthName = (month: number) => {
 .month {
   display: flex;
   flex-direction: column;
-  justify-content: stretch;
-  align-items: stretch;
 }
 
 .year-selector {
