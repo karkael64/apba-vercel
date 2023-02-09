@@ -1,59 +1,64 @@
 <script lang="ts">
-import {
-  dateToString,
-  getDayName,
-  getMonthName,
-  getWeek,
-  getWeekFirstDay
-} from '../../common/date';
-import type { Event, Occurence } from './Agenda.svelte';
-import AgendaItem from './AgendaItem.svelte';
+  import {
+    dateToString,
+    getDayName,
+    getMonthName,
+    getWeek,
+    getWeekFirstDay
+  } from '../../common/date';
+  import type { Event, Occurence } from './Agenda.svelte';
+  import AgendaItem from './AgendaItem.svelte';
 
-type EventsTree = {
-  week: number;
-  firstDay: Date;
-  lastDay: Date;
-  dates: { date: Date; dateString: string; singleEvents: Event[]; occurenceEvents: Occurence[] }[];
-};
+  type EventsTree = {
+    week: number;
+    firstDay: Date;
+    lastDay: Date;
+    dates: {
+      date: Date;
+      dateString: string;
+      singleEvents: Event[];
+      occurenceEvents: Occurence[];
+    }[];
+  };
 
-export let events: (Event | Occurence)[] = [];
-export let isWeekStartingWithSunday = false;
+  export let events: (Event | Occurence)[] = [];
+  export let isWeekStartingWithSunday = false;
 
-const isOccurence = (el: Event | Occurence): el is Occurence =>
-  'event' in el && el.event && typeof el.event === 'object';
+  const isOccurence = (el: Event | Occurence): el is Occurence =>
+    'event' in el && el.event && typeof el.event === 'object';
 
-let groupedEvents: EventsTree[];
-$: groupedEvents =
-  events
-    ?.sort((eventA, eventB) => eventA.date.valueOf() - eventB.date.valueOf())
-    .reduce((acc, event) => {
-      const week = getWeek(event.date, isWeekStartingWithSunday);
-      const date = dateToString(event.date);
+  let groupedEvents: EventsTree[];
+  $: groupedEvents =
+    events
+      ?.sort((eventA, eventB) => eventA.date.valueOf() - eventB.date.valueOf())
+      .reduce((acc, event) => {
+        const week = getWeek(event.date, isWeekStartingWithSunday);
+        const date = dateToString(event.date);
 
-      let weekRange = acc.find((item) => item.week === week);
-      if (!weekRange) {
-        const weekFirstDay = getWeekFirstDay(event.date, isWeekStartingWithSunday);
-        const weekLastDay = new Date(weekFirstDay);
-        weekLastDay.setDate(weekLastDay.getDate() + 6);
+        let weekRange = acc.find((item) => item.week === week);
+        if (!weekRange) {
+          const weekFirstDay = getWeekFirstDay(event.date, isWeekStartingWithSunday);
+          const weekLastDay = new Date(weekFirstDay);
+          weekLastDay.setDate(weekLastDay.getDate() + 6);
 
-        weekRange = { week, firstDay: weekFirstDay, lastDay: weekLastDay, dates: [] };
-        acc.push(weekRange);
-      }
+          weekRange = { week, firstDay: weekFirstDay, lastDay: weekLastDay, dates: [] };
+          acc.push(weekRange);
+        }
 
-      let dateRange = weekRange.dates.find((item) => item.dateString === date);
-      if (!dateRange) {
-        dateRange = { date: event.date, dateString: date, singleEvents: [], occurenceEvents: [] };
-        weekRange.dates.push(dateRange);
-      }
+        let dateRange = weekRange.dates.find((item) => item.dateString === date);
+        if (!dateRange) {
+          dateRange = { date: event.date, dateString: date, singleEvents: [], occurenceEvents: [] };
+          weekRange.dates.push(dateRange);
+        }
 
-      if (isOccurence(event)) {
-        dateRange.occurenceEvents.push(event);
-      } else {
-        dateRange.singleEvents.push(event);
-      }
+        if (isOccurence(event)) {
+          dateRange.occurenceEvents.push(event);
+        } else {
+          dateRange.singleEvents.push(event);
+        }
 
-      return acc;
-    }, [] as EventsTree[]) ?? [];
+        return acc;
+      }, [] as EventsTree[]) ?? [];
 </script>
 
 <div class="agenda">
@@ -90,50 +95,53 @@ $: groupedEvents =
 </div>
 
 <style>
-.agenda {
-  width: 100%;
-  max-width: 80vw;
-}
-.week {
-  display: flex;
-  flex-direction: column;
-}
-.date {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-start;
-  border-top: 1px solid var(--minus);
-}
-.day-name {
-  flex: 0 0 5em;
-  width: 5em;
-  height: 5em;
-  border: 1px solid var(--medium);
-  border-radius: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-.occurences {
-  flex: 1 1 50%;
-}
-.singles {
-  flex: 1 1 50%;
-}
-
-@media (max-width: 999px) {
-  .date {
+  .agenda {
+    width: 100%;
+    max-width: 80vw;
+  }
+  .week {
+    display: flex;
     flex-direction: column;
-    justify-content: center;
+  }
+  .week h2 {
+    margin-top: 4em;
+  }
+  .date {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-top: 1px solid var(--medium);
   }
   .day-name {
-    align-self: center;
+    flex: 0 0 5em;
+    width: 5em;
+    height: 5em;
+    border: 1px solid var(--medium);
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
   }
-  .occurences,
+  .occurences {
+    flex: 1 1 50%;
+  }
   .singles {
-    align-self: stretch;
+    flex: 1 1 50%;
   }
-}
+
+  @media (max-width: 999px) {
+    .date {
+      flex-direction: column;
+      justify-content: center;
+    }
+    .day-name {
+      align-self: center;
+    }
+    .occurences,
+    .singles {
+      align-self: stretch;
+    }
+  }
 </style>

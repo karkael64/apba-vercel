@@ -1,7 +1,7 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import type { prisma } from '$lib/db';
 import { client } from '$lib/db';
-import { objectPick } from '$lib/object';
+import { objectPick } from '$lib/components';
 
 const blogPickAttributes = (
   object: prisma.Blog & Record<string, unknown>

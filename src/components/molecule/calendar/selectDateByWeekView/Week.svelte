@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { dateToString } from "src/components/common/date";
-  import { createEventDispatcher } from "svelte";
-  import Day from "../selectDateByMonthView/Day.svelte";
+  import { dateToString } from 'src/components/common/date';
+  import { createEventDispatcher } from 'svelte';
+  import Day from '../selectDateByMonthView/Day.svelte';
 
   export let events: Date[];
   export let year: number;
@@ -29,11 +29,16 @@
 <div class="week">
   {#each weekDays as date}
     {#if date.getFullYear() < year || date.getMonth() < month}
-      <Day number={date.getDate()} pin={displayPin(date)} on:click={previousMonthClick} weak />
+      <Day
+        number="{date.getDate()}"
+        pin="{displayPin(date)}"
+        on:click="{previousMonthClick}"
+        weak
+      />
     {:else if date.getFullYear() > year || date.getMonth() > month}
-      <Day number={date.getDate()} pin={displayPin(date)} on:click={nextMonthClick} weak />
+      <Day number="{date.getDate()}" pin="{displayPin(date)}" on:click="{nextMonthClick}" weak />
     {:else}
-      <Day number={date.getDate()} pin={displayPin(date)} on:click={monthDayClick(date)} />
+      <Day number="{date.getDate()}" pin="{displayPin(date)}" on:click="{monthDayClick(date)}" />
     {/if}
   {/each}
 </div>

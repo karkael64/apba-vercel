@@ -1,8 +1,8 @@
-import { SvelteComponentTyped } from "svelte";
+import { SvelteComponentTyped } from 'svelte';
 
 export type GalleryPicture = {
-	src: string;
-	alt: string;
+  src: string;
+  alt: string;
 };
 
 declare class Gallery extends SvelteComponentTyped<{ pictures: GalleryPicture[] }> {}

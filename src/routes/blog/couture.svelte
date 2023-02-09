@@ -1,13 +1,13 @@
 <script lang="ts">
-import type { CarrouselPicture } from '$lib/components';
-import { Carrousel, SectionPlain } from '$lib/components';
-const pictures: CarrouselPicture[] = [
-  { alt: '', src: '/couture/sac-habille.jpg' },
-  { alt: '', src: '/couture/sac.jpg' },
-  { alt: '', src: '/couture/ambiance.jpg' },
-  { alt: '', src: '/couture/apprendre.jpg' },
-  { alt: '', src: '/couture/atelier.jpg' }
-];
+  import type { CarrouselPicture } from '$lib/components';
+  import { Carrousel, SectionPlain } from '$lib/components';
+  const pictures: CarrouselPicture[] = [
+    { alt: '', src: '/couture/sac-habille.jpg' },
+    { alt: '', src: '/couture/sac.jpg' },
+    { alt: '', src: '/couture/ambiance.jpg' },
+    { alt: '', src: '/couture/apprendre.jpg' },
+    { alt: '', src: '/couture/atelier.jpg' }
+  ];
 </script>
 
 <SectionPlain>

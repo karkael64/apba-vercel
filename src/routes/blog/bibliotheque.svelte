@@ -1,5 +1,5 @@
 <script lang="ts">
-import { SectionPlain } from '$lib/components';
+  import { SectionPlain } from '$lib/components';
 </script>
 
 <SectionPlain>

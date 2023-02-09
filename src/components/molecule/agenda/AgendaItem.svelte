@@ -1,11 +1,11 @@
 <script lang="ts">
-import Markdown from '../markdown/Markdown.svelte';
-import type { Event, Occurence } from './Agenda.svelte';
+  import Markdown from '../markdown/Markdown.svelte';
+  import type { Event, Occurence } from './Agenda.svelte';
 
-const isOccurence = (el: Event | Occurence): el is Occurence =>
-  'event' in el && el.event && typeof el.event === 'object';
+  const isOccurence = (el: Event | Occurence): el is Occurence =>
+    'event' in el && el.event && typeof el.event === 'object';
 
-export let event: Event | Occurence;
+  export let event: Event | Occurence;
 </script>
 
 {#if isOccurence(event)}
@@ -20,16 +20,16 @@ export let event: Event | Occurence;
 {/if}
 
 <style>
-.occurence {
-  border: 3px solid var(--secondary);
-  border-radius: 0.5em;
-  margin: 0.5em;
-  padding: 0.5em 1em;
-}
-.single {
-  border: 3px solid var(--primary);
-  border-radius: 0.5em;
-  margin: 0.5em;
-  padding: 0.5em 1em;
-}
+  .occurence {
+    border: 3px solid var(--secondary);
+    border-radius: 2.5em;
+    margin: 0.5em;
+    padding: 0.5em 1em;
+  }
+  .single {
+    border: 3px solid var(--primary);
+    border-radius: 2.5em;
+    margin: 0.5em;
+    padding: 0.5em 1em;
+  }
 </style>

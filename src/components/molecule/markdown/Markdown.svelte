@@ -1,7 +1,7 @@
 <script lang="ts">
-import markdown from 'markdown-it';
-const md = markdown('commonmark');
-export let content: string;
+  import markdown from 'markdown-it';
+  const md = markdown('commonmark');
+  export let content: string;
 </script>
 
 <div>

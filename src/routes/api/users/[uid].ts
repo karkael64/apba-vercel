@@ -1,7 +1,7 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import type { prisma } from '$lib/db';
 import { client } from '$lib/db';
-import { objectPick } from '$lib/object';
+import { objectPick } from '$lib/components';
 
 const userPickAttributes = (
   object: prisma.User & Record<string, unknown>
@@ -10,7 +10,12 @@ const userPickAttributes = (
 export const get: RequestHandler<never, { user: prisma.User | null }> = async ({
   params: { uid }
 }) => ({
-  body: { user: await client.user.findUnique({ where: { id: parseInt(uid) } }) }
+  body: {
+    user: await client.user.findUnique({
+      where: { id: parseInt(uid) },
+      include: { level: true }
+    })
+  }
 });
 
 export const patch: RequestHandler<{ uid: string }, { user: prisma.User }> = async ({

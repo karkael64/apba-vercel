@@ -1,9 +1,9 @@
-import { SvelteComponentTyped } from "svelte";
+import { SvelteComponentTyped } from 'svelte';
 
 declare class FullSection extends SvelteComponentTyped<{
-	backgroundImage?: string;
-	backgroundFilter?: string;
-	height?: string;
+  backgroundImage?: string;
+  backgroundFilter?: string;
+  height?: string;
 }> {}
 
 export default FullSection;

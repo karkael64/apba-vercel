@@ -11,4 +11,4 @@ export const objectToStyleString = (obj: CSSObject) =>
       }
       return acc;
     }, [] as string[])
-    .join('; ');
+    .join('; ') || undefined;

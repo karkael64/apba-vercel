@@ -1,13 +1,13 @@
 type ColorName =
-	| "positive"
-	| "bonus"
-	| "medium"
-	| "minus"
-	| "negative"
-	| "primary"
-	| "secondary"
-	| "sinopia"
-	| "burntSienna";
+  | 'positive'
+  | 'bonus'
+  | 'medium'
+  | 'minus'
+  | 'negative'
+  | 'primary'
+  | 'secondary'
+  | 'sinopia'
+  | 'burntSienna';
 
 type ColorLightName = `${ColorName}Light`;
 

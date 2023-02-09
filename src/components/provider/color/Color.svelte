@@ -1,46 +1,49 @@
 <script lang="ts">
-	import { onMount } from "svelte";
+  import { onMount } from 'svelte';
 
-	import { dark, light } from "../../common/colors";
-	import { objectReduce } from "../../common/object";
-	import { colorScheme } from "./colorScheme";
+  import { dark, light } from '../../common/colors';
+  import { objectReduce } from '../../common/object';
+  import { colorScheme } from './colorScheme';
 
-	export let defaultColorScheme: "light" | "dark" | undefined = undefined;
+  export let defaultColorScheme: 'light' | 'dark' | undefined = undefined;
 
-	let el: HTMLStyleElement;
+  let el: HTMLStyleElement;
 
-	const colorsToCssVar = (obj: Record<string, string>) =>
-		objectReduce(obj, (acc, item, key) => `${acc}\n--${key}: ${item};`, "");
+  const colorsToCssVar = (obj: Record<string, string>) =>
+    objectReduce(obj, (acc, item, key) => `${acc}\n--${key}: ${item};`, '');
 
-	let index: number;
+  let index: number;
 
-	onMount(() => {
-		colorScheme.subscribe((value) => {
-			if (!el || !el.sheet) {
-				return;
-			}
-			if (index !== undefined) {
-				el.sheet.deleteRule(index);
-			}
-			el.parentNode?.appendChild(el);
-			if (value === "light") {
-				index = el.sheet.insertRule(`:root {${colorsToCssVar(light)}\n}`);
-				localStorage.setItem("color-scheme", "light");
-			} else if (value === "dark") {
-				index = el.sheet.insertRule(`:root {${colorsToCssVar(dark)}\n}`);
-				localStorage.setItem("color-scheme", "dark");
-			} else {
-				const localStorageColorScheme = localStorage.getItem("color-scheme") as "light" | "dark";
-				const userPreferColorScheme = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
-				const setColorScheme = defaultColorScheme || localStorageColorScheme || userPreferColorScheme;
-				colorScheme.set(setColorScheme === "light" ? "light" : "dark");
-			}
-		});
-	});
+  onMount(() => {
+    colorScheme.subscribe((value) => {
+      if (!el || !el.sheet) {
+        return;
+      }
+      if (index !== undefined) {
+        el.sheet.deleteRule(index);
+      }
+      el.parentNode?.appendChild(el);
+      if (value === 'light') {
+        index = el.sheet.insertRule(`:root {${colorsToCssVar(light)}\n}`);
+        localStorage.setItem('color-scheme', 'light');
+      } else if (value === 'dark') {
+        index = el.sheet.insertRule(`:root {${colorsToCssVar(dark)}\n}`);
+        localStorage.setItem('color-scheme', 'dark');
+      } else {
+        const localStorageColorScheme = localStorage.getItem('color-scheme') as 'light' | 'dark';
+        const userPreferColorScheme = window.matchMedia('(prefers-color-scheme: light)').matches
+          ? 'light'
+          : 'dark';
+        const setColorScheme =
+          defaultColorScheme || localStorageColorScheme || userPreferColorScheme;
+        colorScheme.set(setColorScheme === 'light' ? 'light' : 'dark');
+      }
+    });
+  });
 </script>
 
 <svelte:head>
-	<style bind:this={el}></style>
+  <style bind:this="{el}"></style>
 </svelte:head>
 
 <slot />

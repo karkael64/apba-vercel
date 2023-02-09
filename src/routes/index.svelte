@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
-import { SectionSplash, SectionThumbs } from '../components';
-export const prerender = true;
+  import { SectionSplash, SectionThumbs } from '../components';
+  export const prerender = true;
 </script>
 
 <svelte:head>
@@ -18,7 +18,8 @@ export const prerender = true;
 # Bienvenue sur le site web de **APBA**
 
 **Association des Parents du Bois l'Abbé (Champigny-sur-Marne)**
-	`}" />
+	`}"
+/>
 
 <SectionThumbs
   thumbs="{[
@@ -54,7 +55,8 @@ qui veut connaitre son environnement, vous venez d'arriver dans le quartier, vou
 par le développement du quartier... Nous vous accueillerons à bras ouverts !
 		`
     }
-  ]}" />
+  ]}"
+/>
 
 <SectionSplash
   height="80vh"
@@ -65,7 +67,8 @@ par le développement du quartier... Nous vous accueillerons à bras ouverts !
     { href: '/blog/activites', text: 'Bien-être et santé', color: 'secondary' },
     { href: '/blog/solidarites', text: 'Solidarités', color: 'primary' }
   ]}"
-  variant="left" />
+  variant="left"
+/>
 
 <SectionThumbs
   thumbs="{[
@@ -101,4 +104,5 @@ Nous acceuillons les familles tous les mercredis pour des activités en après-m
 pour des journées autour des jeux de société.
     `
     }
-  ]}" />
+  ]}"
+/>

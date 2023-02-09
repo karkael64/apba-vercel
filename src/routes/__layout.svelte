@@ -1,22 +1,22 @@
 <script lang="ts">
-	import { Color, Nav, Footer } from '../components';
-	import '../app.css';
+  import { Color, Nav, Footer } from '../components';
+  import '../app.css';
 </script>
 
 <Color />
 <Nav />
 <main>
-	<slot />
+  <slot />
 </main>
 <Footer />
 
 <style>
-	main {
-		display: flex;
-		flex-direction: column;
-		flex: 1;
-		justify-content: center;
-		align-items: center;
-		min-height: calc(100vh - 314px);
-	}
+  main {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 314px);
+  }
 </style>

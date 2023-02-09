@@ -1,2 +1,2 @@
-import { writable } from "svelte/store";
-export const colorScheme = writable<"light" | "dark">();
+import { writable } from 'svelte/store';
+export const colorScheme = writable<'light' | 'dark'>();

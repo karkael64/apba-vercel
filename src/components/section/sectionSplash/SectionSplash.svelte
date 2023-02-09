@@ -1,21 +1,23 @@
 <script lang="ts">
-import Markdown from '../../molecule/markdown/Markdown.svelte';
-import type { ButtonProps } from '../../atoms/buttons/Buttons.svelte';
-import Buttons from '../../atoms/buttons/Buttons.svelte';
-import FullSection from '../../layout/fullSection/FullSection.svelte';
-import ImageLoader from '../../molecule/imageLoader/ImageLoader.svelte';
+  import Markdown from '../../molecule/markdown/Markdown.svelte';
+  import type { ButtonProps } from '../../atoms/buttons/Buttons.svelte';
+  import Buttons from '../../atoms/buttons/Buttons.svelte';
+  import FullSection from '../../layout/fullSection/FullSection.svelte';
+  import ImageLoader from '../../molecule/imageLoader/ImageLoader.svelte';
 
-export let buttonList: ButtonProps[];
-export let backgroundImages: string[];
-export let height = '80vh';
-export let body = '';
-export let variant = '';
+  export let buttonList: ButtonProps[];
+  export let backgroundImages: string[];
+  export let height = '80vh';
+  export let body = '';
+  export let variant = '';
 </script>
 
 <FullSection height="{height}">
   <div class="split-background">
     {#each backgroundImages as backgroundImage}
-      <ImageLoader src="{backgroundImage}" alt="" />
+      <div>
+        <ImageLoader src="{backgroundImage}" alt="" width="100%" height="100%" />
+      </div>
     {/each}
   </div>
   <div class="{`splash ${variant}`}">
@@ -27,36 +29,14 @@ export let variant = '';
 </FullSection>
 
 <style>
-.splash {
-  position: absolute;
-  bottom: 5em;
-  background: linear-gradient(var(--negative), var(--minus));
-  color: var(--positive);
-  padding: 2em 3em;
-  margin: 5em 5%;
-  border-radius: 1em;
-}
-
-.split-background {
-  display: flex;
-  height: 100%;
-}
-
-.splash-button {
-  position: absolute;
-}
-
-@media only screen and (min-width: 1000px) {
   .splash {
-    right: 10em;
-    margin: 0;
+    position: absolute;
+    bottom: 5em;
+    background: linear-gradient(var(--negative), var(--minus));
+    color: var(--positive);
     padding: 2em 3em;
+    margin: 5em 5%;
     border-radius: 1em;
-  }
-
-  .splash.left {
-    left: 10em;
-    right: auto;
   }
 
   .split-background {
@@ -64,8 +44,35 @@ export let variant = '';
     height: 100%;
   }
 
-  .splash-button {
-    right: -5em;
+  .split-background > div {
+    flex: 1 1 1px;
+    overflow: hidden;
   }
-}
+
+  .splash-button {
+    position: absolute;
+  }
+
+  @media only screen and (min-width: 1000px) {
+    .splash {
+      right: 10em;
+      margin: 0;
+      padding: 2em 3em;
+      border-radius: 1em;
+    }
+
+    .splash.left {
+      left: 10em;
+      right: auto;
+    }
+
+    .split-background {
+      display: flex;
+      height: 100%;
+    }
+
+    .splash-button {
+      right: -5em;
+    }
+  }
 </style>
