@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { CSSObject } from '../../common/style';
-  import { objectToStyleString } from '../../common/style';
+  import type { CSSObject } from '../../../common/style';
+  import { objectToStyleString } from '../../../common/style';
   import ImageLoader from '../../molecule/imageLoader/ImageLoader.svelte';
 
   export let backgroundImage: string | undefined = undefined;
@@ -17,8 +17,7 @@
         src="{backgroundImage}"
         alt="Fond de section"
         height="{height || '100vh'}"
-        filter="{backgroundFilter}"
-      />
+        filter="{backgroundFilter}" />
     </div>
   {/if}
   <slot />

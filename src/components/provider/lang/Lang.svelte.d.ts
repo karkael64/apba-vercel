@@ -1,4 +1,4 @@
-import type { AnyObject } from 'src/components/common/ambient';
+import type { AnyObject } from 'src/common/ambient';
 import { SvelteComponentTyped } from 'svelte';
 
 declare class Lang extends SvelteComponentTyped<

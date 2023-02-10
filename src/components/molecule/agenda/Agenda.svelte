@@ -5,7 +5,7 @@
     getMonthName,
     getWeek,
     getWeekFirstDay
-  } from '../../common/date';
+  } from '../../../common/date';
   import type { Event, Occurence } from './Agenda.svelte';
   import AgendaItem from './AgendaItem.svelte';
 

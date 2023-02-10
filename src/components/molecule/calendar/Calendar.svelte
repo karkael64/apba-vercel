@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { SvelteEvent } from 'src/components/common/ambient';
+  import type { SvelteEvent } from 'src/common/ambient';
 
   import SelectDateByMonth from './selectDateByMonthView/Month.svelte';
   import SelectMonth from './selectMonth/SelectMonth.svelte';
@@ -61,8 +61,7 @@
       on:previous="{onPreviousMonthClick}"
       on:next="{onNextMonthClick}"
       on:editmonth="{onChangeView('month')}"
-      on:edityear="{onChangeView('year')}"
-    />
+      on:edityear="{onChangeView('year')}" />
   {/if}
 </div>
 

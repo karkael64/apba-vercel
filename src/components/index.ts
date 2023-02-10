@@ -1,5 +1,5 @@
 export * from './atoms';
-export * from './common';
+export * from '../common';
 export * from './layout';
 export * from './molecule';
 export * from './organism';

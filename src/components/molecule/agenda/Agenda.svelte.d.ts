@@ -1,4 +1,4 @@
-import type { SvelteEvent } from 'src/components/common/ambient';
+import type { SvelteEvent } from 'src/common/ambient';
 import { SvelteComponentTyped } from 'svelte';
 
 export type File = {

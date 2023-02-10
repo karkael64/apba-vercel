@@ -1,7 +1,7 @@
 {
   "extends": "./.svelte-kit/tsconfig.json",
   "include": ["src"],
-  "exclude": ["src/components/common/colors.js", "src/hooks.js", "*.stories.svelte"],
+  "exclude": ["src/common/colors.js", "src/hooks.js", "*.stories.svelte"],
   "compilerOptions": {
     "allowJs": true,
     "checkJs": true,

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { dateToString, getMonthName } from '../../../common/date';
+  import { dateToString, getMonthName } from '../../../../common/date';
   import { createEventDispatcher } from 'svelte';
   import Day from './Day.svelte';
 
@@ -67,21 +67,18 @@
             number="{date.getDate()}"
             pin="{displayPin(date)}"
             on:click="{previousMonthClick}"
-            weak
-          />
+            weak />
         {:else if dateYear > year || (dateYear === year && date.getMonth() > month)}
           <Day
             number="{date.getDate()}"
             pin="{displayPin(date)}"
             on:click="{nextMonthClick}"
-            weak
-          />
+            weak />
         {:else}
           <Day
             number="{date.getDate()}"
             pin="{displayPin(date)}"
-            on:click="{monthDayClick(date)}"
-          />
+            on:click="{monthDayClick(date)}" />
         {/if}
       </div>
     {/each}

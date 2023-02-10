@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { dateToString } from 'src/components/common/date';
+  import { dateToString } from 'src/common/date';
   import { createEventDispatcher } from 'svelte';
   import Day from '../selectDateByMonthView/Day.svelte';
 
@@ -33,8 +33,7 @@
         number="{date.getDate()}"
         pin="{displayPin(date)}"
         on:click="{previousMonthClick}"
-        weak
-      />
+        weak />
     {:else if date.getFullYear() > year || date.getMonth() > month}
       <Day number="{date.getDate()}" pin="{displayPin(date)}" on:click="{nextMonthClick}" weak />
     {:else}

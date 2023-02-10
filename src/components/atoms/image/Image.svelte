@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { objectToStyleString } from '../../common/style';
+  import { objectToStyleString } from '../../../common/style';
 
   export let src: string;
   export let alt: string;

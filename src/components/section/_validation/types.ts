@@ -1,4 +1,4 @@
-import type { AnyObject } from 'src/components/common/ambient';
+import type { AnyObject } from 'src/common/ambient';
 
 export const isObject = (el: unknown): el is AnyObject => !!el && typeof el === 'object';
 export const isString = <R extends string = string>(el: unknown): el is R => typeof el === 'string';
