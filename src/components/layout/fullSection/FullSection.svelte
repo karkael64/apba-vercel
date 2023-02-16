@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { CSSObject } from '../../../common/style';
-  import { objectToStyleString } from '../../../common/style';
+  import type { CSSObject } from '$lib/client';
+  import { objectToStyleString } from '$lib/client';
   import ImageLoader from '../../molecule/imageLoader/ImageLoader.svelte';
 
   export let backgroundImage: string | undefined = undefined;

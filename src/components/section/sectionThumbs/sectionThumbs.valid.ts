@@ -1,7 +1,12 @@
-import type { AnyObject } from '../../../common/ambient';
-import type { JSONSchemaFromType } from '../../../common/jsonSchema';
 import type { Thumb, SectionThumbsProps } from './SectionThumbs.svelte';
-import { expectBetween, expectString, hasErrors, isValid } from '../../../common/jsonSchema';
+import {
+  expectBetween,
+  expectString,
+  hasErrors,
+  isValid,
+  type AnyObject,
+  type JSONSchemaFromType
+} from '$lib/client';
 
 const schemaThumb: JSONSchemaFromType<Thumb> = {
   properties: {

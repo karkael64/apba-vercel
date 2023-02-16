@@ -17,20 +17,31 @@ model Post {
 }
 
 model User {
-  id      Int       @id @default(autoincrement())
-  email   String    @unique
-  name    String?
-  posts   Post[]
-  blogs   Blog[]
-  files   File[]
-  level   UserLevel @relation(fields: [levelId], references: [id])
-  levelId Int
+  id       Int       @id @default(autoincrement())
+  email    String    @unique
+  name     String?
+  posts    Post[]
+  blogs    Blog[]
+  files    File[]
+  auths    UserAuth[]
+  level    UserLevel @relation(fields: [levelId], references: [id])
+  levelId  Int
+  password String
 }
 
 model UserLevel {
   id    Int    @id @default(autoincrement())
   name  String
   users User[]
+}
+
+model UserAuth {
+  id     Int  @id @default(autoincrement())
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+  expire DateTime
+  token  String
+  ip     String
 }
 
 model Blog {

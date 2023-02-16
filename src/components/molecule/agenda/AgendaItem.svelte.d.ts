@@ -1,4 +1,4 @@
-import type { SvelteEvent } from 'src/common/ambient';
+import type { SvelteEvent } from '$lib/client';
 import { SvelteComponentTyped } from 'svelte';
 import type { Event, Occurence } from './Agenda.svelte';
 

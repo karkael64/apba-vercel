@@ -1,11 +1,5 @@
 <script lang="ts">
-  import {
-    dateToString,
-    getDayName,
-    getMonthName,
-    getWeek,
-    getWeekFirstDay
-  } from '../../../common/date';
+  import { dateToString, getDayName, getMonthName, getWeek, getWeekFirstDay } from '$lib/client';
   import type { Event, Occurence } from './Agenda.svelte';
   import AgendaItem from './AgendaItem.svelte';
 

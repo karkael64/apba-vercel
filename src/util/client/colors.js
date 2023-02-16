@@ -1,6 +1,3 @@
-import { objectMap } from './object';
-import { camelToKebab } from './string';
-
 const negative = '#212529';
 const minus = '#343a40';
 const medium = '#6c757d';
@@ -71,6 +68,3 @@ export const light = {
   sinopia: sinopiaLight,
   burntSienna: burntSiennaLight
 };
-
-export const darkVar = objectMap(dark, (_, key) => `var(--${camelToKebab(key)})`);
-export const lightVar = objectMap(light, (_, key) => `var(--${camelToKebab(key)})`);

@@ -9,7 +9,7 @@
 </script>
 
 <script lang="ts">
-  import { Button } from '../components';
+  import { Button } from '$lib/client';
   export let title: string;
   const goBack = () => window.history.back();
 </script>

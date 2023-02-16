@@ -1,8 +1,11 @@
-import { client } from '../../../lib/db';
-import type { Blog } from '../../../lib/db';
-import type { RequestHandler } from '@sveltejs/kit';
+import { client, type prisma, handleRequest } from '$lib/server';
 
-export const post: RequestHandler = async ({ request }) => {
-  const { authorId, body, slug, title } = (await request.json()) as Blog;
-  return { body: { blog: await client.blog.create({ data: { authorId, body, slug, title } }) } };
-};
+export const post = handleRequest<never, { blog: prisma.Blog }, { blog: prisma.Blog }>(
+  'admin',
+  async ({ request }) => {
+    const {
+      blog: { authorId, body, slug, title }
+    } = await request.json();
+    return { body: { blog: await client.blog.create({ data: { authorId, body, slug, title } }) } };
+  }
+);

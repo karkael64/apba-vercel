@@ -1,4 +1,4 @@
-import type { AnyObject } from 'src/common/ambient';
+import type { AnyObject } from '$lib/client';
 import { isString, isStringList } from './types';
 
 export const hasString = <R extends string, T extends AnyObject, K extends string>(

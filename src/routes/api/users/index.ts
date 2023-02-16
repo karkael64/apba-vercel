@@ -1,34 +1,42 @@
-import type { RequestHandler } from '@sveltejs/kit';
-import type { prisma } from '$lib/db';
-import { client } from '$lib/db';
+import {
+  client,
+  handleRequest,
+  HttpCode,
+  objectRemoveUndefined,
+  stringToHashPepper
+} from '$lib/server';
+import { checkUserParam, type UserLight } from './[uid]';
 
-export const get: RequestHandler<never, { users: prisma.User[] }> = async () => ({
-  body: { users: await client.user.findMany() }
-});
+export const get = handleRequest<never, never, { users: UserLight[] }>('self', async () => ({
+  body: {
+    users: await client.user.findMany({
+      select: { id: true, email: true, name: true, level: true }
+    })
+  }
+}));
 
-export const post: RequestHandler<never, { user: prisma.User } | { message: string }> = async ({
-  request
-}) => {
+export const post = handleRequest<
+  never,
+  { user: Partial<{ email: string; name: string; password: string; levelId: number }> },
+  UserLight
+>('admin', async ({ request }) => {
   const {
-    user: { email, levelId, name }
+    user: { email, name, password, levelId }
   } = await request.json();
-  const cookie = request.headers.get('cookie');
 
-  if (!cookie) {
-    return { status: 403 };
+  const errors = checkUserParam({ email, name, password, levelId }, false);
+
+  if (errors.length) {
+    throw HttpCode.badRequest(errors);
   }
 
-  try {
-    const user = await client.user.create({ data: { email, levelId, name } });
-    const { id } = user;
-    return {
-      status: 302,
-      headers: { location: `/api/users/${id}` }
-    };
-  } catch (e) {
-    return {
-      status: 400,
-      body: { message: `${e}` }
-    };
-  }
-};
+  const encodedPassword = password && stringToHashPepper(password);
+  const data = objectRemoveUndefined({ email, levelId, name, password: encodedPassword });
+
+  const user = await client.user.create({ data });
+  const { id } = user;
+  return {
+    status: 302,
+    headers: { location: `/api/users/${id}` }
+  };
+});

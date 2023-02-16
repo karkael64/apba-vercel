@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { ImageLoader, MenuButton, SwitchColor } from '$lib/components';
+  import { MenuButton } from '../../atoms';
+  import { ImageLoader, SwitchColor } from '../../molecule';
 
   let open = false;
 
@@ -49,10 +50,10 @@
             <SwitchColor />
           </li>
           <li>
-            <a href="/login">Connexion</a>
+            <a href="/logout">Déconnexion</a>
           </li>
           <li>
-            <a href="/logout">Déconnexion</a>
+            <a href="/login">Connexion</a>
           </li>
           <li>
             <a href="/profile">Paramètres</a>
@@ -72,10 +73,10 @@
           <a href="/contact">Contact</a>
         </li>
         <li>
-          <a href="/login">Connexion</a>
+          <a href="/logout">Déconnexion</a>
         </li>
         <li>
-          <a href="/logout">Déconnexion</a>
+          <a href="/login">Connexion</a>
         </li>
         <li>
           <a href="/profile">Paramètres</a>

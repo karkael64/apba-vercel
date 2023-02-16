@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Color, Nav, Footer } from '../components';
+  import { Color, Nav, Footer } from '$lib/client';
   import '../app.css';
 </script>
 

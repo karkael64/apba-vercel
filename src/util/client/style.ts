@@ -1,4 +1,4 @@
-import { camelToKebab } from './string';
+import { camelToKebab } from '../common';
 
 export type CSSObject = Partial<Record<keyof CSSStyleDeclaration, string | number>>;
 export type CSSObjectRule = Record<string, CSSObject>;

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { dateToString } from 'src/common/date';
+  import { dateToString } from '$lib/client';
   import { createEventDispatcher } from 'svelte';
   import Day from '../selectDateByMonthView/Day.svelte';
 

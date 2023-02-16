@@ -3,6 +3,7 @@
 /.output
 /.svelte-kit
 /.vercel
+/.vscode
 /build
 /node_modules
 /package

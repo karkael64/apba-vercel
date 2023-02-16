@@ -1,14 +1,14 @@
 import type { ButtonProps } from '../../atoms/buttons/Buttons.svelte';
 import type { SectionSplashProps } from './SectionSplash.svelte';
-import type { AnyObject } from '../../../common/ambient';
-import type { JSONSchemaFromType } from '../../../common/jsonSchema';
+import type { AnyObject } from '$lib/client';
 import {
   expectBetween,
   expectString,
   expectStringList,
   isValid,
-  hasErrors
-} from '../../../common/jsonSchema';
+  hasErrors,
+  type JSONSchemaFromType
+} from '$lib/client';
 
 const schemaButton: JSONSchemaFromType<ButtonProps> = {
   properties: {

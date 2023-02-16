@@ -1,6 +1,5 @@
 <script lang="ts">
-  import type { CarrouselPicture } from '$lib/components';
-  import { Carrousel, SectionPlain } from '$lib/components';
+  import { Carrousel, SectionPlain, type CarrouselPicture } from '$lib/client';
   const pictures: CarrouselPicture[] = [
     { alt: '', src: '/parents/famille.jpg' },
     { alt: '', src: '/equipe/benevoles.jpg' },

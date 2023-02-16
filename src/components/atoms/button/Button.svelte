@@ -5,7 +5,7 @@
 </script>
 
 {#if href}
-  <a href="{href}" type="button" class="{`button ${color} ${shape}`}"><slot /></a>
+  <a href="{href}" type="button" class="{`button ${color} ${shape}`}" on:click><slot /></a>
 {:else}
   <button type="button" class="{`button ${color} ${shape}`}" on:click>
     <slot />

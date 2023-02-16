@@ -12,8 +12,7 @@
 </script>
 
 <script lang="ts">
-  import type { prisma } from '$lib/db';
-  import { SectionThumbs, SectionSplash } from '$lib/components';
+  import { SectionThumbs, SectionSplash, type prisma } from '$lib/client';
   export let blog: null | (prisma.Blog & { sections: prisma.BlogSection[] });
 </script>
 
