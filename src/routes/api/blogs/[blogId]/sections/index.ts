@@ -1,5 +1,5 @@
 import { type prisma, client, handleRequest, HttpCode, objectRemoveUndefined } from '$lib/server';
-import { checkBlogSectionParam } from 'src/routes/api/sections/[blogSectionId]';
+import { checkBlogSectionParam } from '../../../sections/[blogSectionId]';
 
 export const get = handleRequest<{ blogId: string }, never, { blogSections: prisma.BlogSection[] }>(
   null,

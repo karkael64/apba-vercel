@@ -1,6 +1,12 @@
 <script lang="ts">
-  import { Agenda, Calendar, dateToString, type SvelteEvent } from '$lib/client';
-  import type { Event, Occurence } from 'src/components/molecule/agenda/Agenda.svelte';
+  import {
+    Agenda,
+    Calendar,
+    dateToString,
+    type SvelteEvent,
+    type Event,
+    type Occurence
+  } from '$lib/client';
 
   const today = new Date();
 
