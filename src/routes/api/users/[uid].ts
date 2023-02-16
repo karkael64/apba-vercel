@@ -18,10 +18,10 @@ export type UserLight = {
 };
 
 export const checkUserParam = (
-  user: Partial<{ email: string; name: string; password: string; levelId: number }>,
+  user: Partial<{ email: string; name: string; password: string }>,
   partial: boolean
 ) => {
-  const { email, name, password, levelId } = user;
+  const { email, name, password } = user;
 
   const errors: BadRequestParam[] = [];
 
@@ -86,24 +86,6 @@ export const checkUserParam = (
     }
   }
 
-  if (!partial || levelId !== undefined) {
-    if (levelId === undefined) {
-      errors.push({
-        location: 'body',
-        field: 'levelId',
-        value: levelId,
-        message: 'levelId should not be empty'
-      });
-    } else if (!isFinite(levelId)) {
-      errors.push({
-        location: 'body',
-        field: 'levelId',
-        value: levelId,
-        message: 'levelId should be a number'
-      });
-    }
-  }
-
   return errors;
 };
 
@@ -119,21 +101,21 @@ export const get = handleRequest<{ uid: string }, never, UserLight | null>(
 
 export const patch = handleRequest<
   { uid: string },
-  { user: Partial<{ email: string; name: string; password: string; levelId: number }> },
+  { user: Partial<{ email: string; name: string; password: string }> },
   UserLight
 >('self', async ({ params: { uid }, request }) => {
   const {
-    user: { email, name, password, levelId }
+    user: { email, name, password }
   } = await request.json();
 
-  const errors = checkUserParam({ email, name, password, levelId }, true);
+  const errors = checkUserParam({ email, name, password }, true);
 
   if (errors.length) {
     throw HttpCode.badRequest(errors);
   }
 
   const encodedPassword = password && stringToHashPepper(password);
-  const data = objectRemoveUndefined({ email, levelId, name, password: encodedPassword });
+  const data = objectRemoveUndefined({ email, levelId: 2, name, password: encodedPassword });
 
   return {
     body: await client.user.update({

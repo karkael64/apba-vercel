@@ -36,9 +36,17 @@ export const getConnectedUser = async ({
 export const createUserAuth = async (
   { locals: { userid: token }, clientAddress: ip }: RequestEvent,
   userId: number
-): Promise<ConnectedUser> =>
-  await client.userAuth.create({
-    data: {
+): Promise<ConnectedUser> => {
+  const res = await client.userAuth.upsert({
+    where: {
+      token
+    },
+    update: {
+      userId,
+      ip,
+      expire: new Date(Date.now() + AUTH_DURATION).toJSON()
+    },
+    create: {
       userId,
       token,
       ip,
@@ -50,3 +58,9 @@ export const createUserAuth = async (
       user: { select: { id: true, email: true, name: true, level: true } }
     }
   });
+  return res;
+};
+
+export const expireUserAuth = async ({ locals: { userid: token } }: RequestEvent) => {
+  await client.userAuth.delete({ where: { token } });
+};

@@ -36,11 +36,11 @@ model UserLevel {
 }
 
 model UserAuth {
-  id     Int  @id @default(autoincrement())
-  user   User @relation(fields: [userId], references: [id])
+  id     Int      @id @default(autoincrement())
+  user   User     @relation(fields: [userId], references: [id])
   userId Int
   expire DateTime
-  token  String
+  token  String   @unique
   ip     String
 }
 

@@ -1,4 +1,4 @@
-export { type ConnectedUser, createUserAuth, getConnectedUser } from './auth';
+export { type ConnectedUser, createUserAuth, getConnectedUser, expireUserAuth } from './auth';
 export {
   handleRequest,
   stringToHashPepper,
