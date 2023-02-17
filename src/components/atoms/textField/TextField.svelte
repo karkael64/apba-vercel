@@ -5,8 +5,9 @@
   export let type: string;
   export let name: string;
   export let label: string;
-  export let error: string | undefined = undefined;
   export let value: string = '';
+  export let error: string | undefined = undefined;
+  export let placeholder: string | undefined = undefined;
 
   let inputRef: HTMLInputElement;
   let focus = false;
@@ -39,24 +40,31 @@
       inputRef,
       () => inputRef.matches('input:-webkit-autofill, input:autofill'),
       () => (focus = true),
-      { interval: 10 }
+      { interval: 10, until: 1000 }
     );
   });
+
+  let shrink: boolean;
+  $: {
+    shrink = placeholder === undefined && !focus && inputRef?.value.length <= 0;
+  }
 </script>
 
 <label>
   <span class="label-placeholder">&nbsp;</span>
-  <span class="{`label-text ${!focus && inputRef?.value.length <= 0 ? 'inner' : ''}`}"
-    >{label}</span>
+  <span class="{`label-text ${shrink ? 'inner' : ''}`}">{label}</span>
   <input
     bind:this="{inputRef}"
     value="{value}"
     name="{name}"
     type="{type}"
+    placeholder="{placeholder}"
     on:input="{onInput}"
     on:focus="{onFocus}"
     on:blur="{onBlur}" />
-  <span class="{`error ${error ? 'active' : ''}`}">{error}</span>
+  {#if error !== undefined}
+    <span class="{`error ${error ? 'active' : ''}`}">{error}</span>
+  {/if}
 </label>
 
 <style>
@@ -64,6 +72,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    padding-bottom: 1rem;
   }
   span.label-placeholder {
     opacity: 0;
@@ -78,7 +87,7 @@
     width: 100%;
   }
   span.label-text.inner {
-    top: 1.875rem;
+    top: 1.75rem;
     left: 1rem;
     width: calc(100% - 2rem);
   }
@@ -115,8 +124,10 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding: 0 0.5rem;
+    font-size: 0.875rem;
+    padding: 0 0.5em;
     border-radius: 0.25rem;
+    height: 1.125em;
   }
   span.error.active {
     opacity: 1;

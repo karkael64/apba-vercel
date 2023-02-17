@@ -60,7 +60,6 @@ export const get = handleRequest<
   never,
   { blog: null | (prisma.Blog & { sections: prisma.BlogSection[] }) }
 >(null, async ({ params: { blogId: slug } }) => {
-  console.log({ client });
   const id = parseInt(slug);
   if (!isFinite(id)) {
     return {

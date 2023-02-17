@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { cookieParse } from '$lib/client';
+  import { onMount } from 'svelte';
   import { MenuButton } from '../../atoms';
   import { ImageLoader, SwitchColor } from '../../molecule';
 
@@ -17,6 +19,10 @@
     prevent(ev);
     open = false;
   };
+
+  onMount(() => {
+    console.log(cookieParse(document.cookie));
+  });
 </script>
 
 <svelte:window on:click="{close}" />

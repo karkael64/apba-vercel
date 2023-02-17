@@ -9,18 +9,18 @@ export {
   getYearFirstDate
 } from './date';
 export {
-  shouldBe,
-  isValid,
-  hasErrors,
   expectBetween,
   expectString,
   expectStringList,
+  hasErrors,
+  isValid,
+  shouldBe,
   type JSONSchemaFromType
 } from './jsonSchema';
 export {
+  hasObjectAttribute,
   isObject,
   isObjectValueContained,
-  hasObjectAttribute,
   objectKeys,
   objectMap,
   objectPick,
@@ -29,6 +29,11 @@ export {
   objectToToken
 } from './object';
 export {
+  camelToKebab,
+  cookieParse,
+  cookieSerialize,
+  generateHash,
+  generateUUID,
   isDate,
   isEmail,
   isJsonString,
@@ -36,8 +41,6 @@ export {
   isString,
   isUri,
   isUuid,
-  camelToKebab,
-  generateHash,
   stringFromBinary,
   stringToBinary,
   stringToHash

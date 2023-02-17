@@ -1,4 +1,4 @@
-import type { Truthy } from './ambient';
+import type { AnyObject, Truthy } from './ambient';
 
 export const isString = (el: unknown): el is string => typeof el === 'string';
 
@@ -6,12 +6,11 @@ export const camelToKebab = (field: string) =>
   field.replace(/[A-Z]/g, (sub) => `-${sub.toLowerCase()}`);
 
 const MAX_SAFE_HEXA = Number.MAX_SAFE_INTEGER.toString(16);
-
-const MAX_SAFE_INTEGER_HEXA = MAX_SAFE_HEXA.startsWith('f')
+const MAX_SAFE_HEXA_NUMBER = MAX_SAFE_HEXA.startsWith('f')
   ? Number.MAX_SAFE_INTEGER
-  : Math.pow(16, MAX_SAFE_HEXA.length - 1);
+  : Math.pow(16, MAX_SAFE_HEXA.length - 1) - 1;
 
-const generateHashRaw = () => Math.trunc(MAX_SAFE_INTEGER_HEXA * Math.random()).toString(16);
+const generateHashRaw = () => Math.trunc(MAX_SAFE_HEXA_NUMBER * Math.random()).toString(16);
 
 export const generateHash = (length = 32) => {
   let sum = generateHashRaw();
@@ -64,4 +63,30 @@ export const isJsonString = (text: string) => {
   } catch {
     return false;
   }
+};
+
+export const cookieParse = (cookieText: string) =>
+  cookieText.split(';').reduce((acc, assign) => {
+    const [key, ...others] = assign.split('=');
+    if (key) {
+      const value = others.join('=');
+      acc[decodeURIComponent(key.trim())] = value.length ? decodeURIComponent(value) : true;
+    }
+    return acc;
+  }, {} as AnyObject<string, string | boolean>);
+
+export const cookieSerialize = (cookies: AnyObject<string, number | string | boolean>) =>
+  Object.entries(cookies)
+    .map(([key, value]) =>
+      value === true
+        ? encodeURIComponent(key)
+        : `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+    )
+    .join('; ');
+
+export const generateUUID = (version = Math.trunc(Math.random() * 6)) => {
+  const key = Math.trunc(8 + Math.random() * 4).toString(16);
+  return `${generateHash(8)}-${generateHash(4)}-${version}${generateHash(3)}-${key}${generateHash(
+    3
+  )}-${generateHash(12)}`;
 };

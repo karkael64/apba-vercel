@@ -10,13 +10,14 @@ import {
 } from '$lib/server';
 
 export const get = handleRequest<never, never, ConnectedUser>('self', async (event, userAuth) => {
-  if (userAuth) {
-    return {
-      status: 200,
-      body: userAuth
-    };
+  if (!userAuth) {
+    throw HttpCode.forbidden();
   }
-  throw HttpCode.unauthorized();
+
+  return {
+    status: 200,
+    body: userAuth
+  };
 });
 
 export const post = handleRequest<
@@ -25,11 +26,6 @@ export const post = handleRequest<
   ConnectedUser
 >(null, async (event) => {
   const { username, password } = await event.request.json();
-  const cookie = event.request.headers.get('cookie');
-
-  if (!cookie) {
-    throw HttpCode.forbidden();
-  }
 
   const errors: BadRequestParam[] = [];
 
@@ -83,10 +79,7 @@ export const post = handleRequest<
   if (user) {
     return {
       status: 200,
-      body: await createUserAuth(event, user.id),
-      headers: {
-        'Set-Cookie': `connected=true; group=${user.level.name}`
-      }
+      body: await createUserAuth(event, user.id)
     };
   }
   throw HttpCode.notFound();

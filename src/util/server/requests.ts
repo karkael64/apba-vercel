@@ -86,10 +86,6 @@ export class HttpCode extends Error {
     return new this(400, 'Bad request', { cause: errors });
   }
 
-  static unauthorized() {
-    return new this(401, 'Unauthorized');
-  }
-
   static forbidden() {
     return new this(403, 'Forbidden');
   }
@@ -121,19 +117,21 @@ const authorizeMap: Record<
 
 export const handleRequest =
   <Params extends AnyObject = never, Body = never, Output = never>(
-    loggedIn: null | keyof typeof authorizeMap,
+    logState: null | keyof typeof authorizeMap,
     fn: RequestHandler<Params, Body, Output>
   ) =>
   async (
     event: RequestEvent<Params, Body>
   ): Promise<RequestHandlerOutput<Output | OutputError>> => {
     try {
-      const userAuth = await getConnectedUser(event);
-      if (loggedIn) {
-        const verifyAuth = authorizeMap[loggedIn];
-        if (!verifyAuth(userAuth, event)) throw HttpCode.forbidden();
+      let userAuth: ConnectedUser | null = null;
+      if (logState) {
+        userAuth = await getConnectedUser(event);
+        const verifyAuth = authorizeMap[logState];
+        if (!verifyAuth?.(userAuth, event)) throw HttpCode.forbidden();
       }
-      return await fn(event, userAuth);
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      return await fn(event, userAuth!);
     } catch (error) {
       if (error instanceof HttpCode) {
         const code = error.code;
