@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { RequestHandlerOutput } from '@sveltejs/kit';
 import { getConnectedUser, type ConnectedUser } from './auth';
 import {
@@ -126,7 +127,7 @@ export const handleRequest =
     try {
       let userAuth: ConnectedUser | null = null;
       if (logState) {
-        userAuth = await getConnectedUser(event);
+        userAuth = await getConnectedUser(event.locals.userid);
         const verifyAuth = authorizeMap[logState];
         if (!verifyAuth?.(userAuth, event)) throw HttpCode.forbidden();
       }
@@ -175,3 +176,11 @@ export const handleRequest =
 const PEPPER = process?.env.PEPPER || '';
 
 export const stringToHashPepper = (text: string) => stringToHash(PEPPER + text);
+
+export type JsonOutput<T> = T extends Date | (new (...args: any) => { toJSON: any })
+  ? string
+  : T extends symbol | ((...args: any[]) => any)
+  ? never
+  : T extends AnyObject
+  ? { [k in keyof T]: JsonOutput<T[k]> }
+  : T;

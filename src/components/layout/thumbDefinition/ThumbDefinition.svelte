@@ -48,5 +48,6 @@
 
   .desc {
     width: 20em;
+    position: relative;
   }
 </style>

@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { TextField, Button } from '$lib/client';
+  import type { ConnectedUser, JsonOutput } from '$lib/server';
+  import { TextField, Button, storage, type prisma } from '$lib/client';
   import { onMount } from 'svelte';
 
   let usernameValue = '';
@@ -15,15 +16,20 @@
       passwordError = 'Veuillez remplir le mot de passe';
     }
     if (usernameValue && passwordValue) {
-      await fetch('/api/auth/login', {
-        method: 'POST',
-        body: JSON.stringify({ username: usernameValue, password: passwordValue })
-      });
+      const userAuth = (await (
+        await fetch('/api/auth/login', {
+          method: 'POST',
+          body: JSON.stringify({ username: usernameValue, password: passwordValue })
+        })
+      ).json()) as JsonOutput<ConnectedUser>;
+      storage.set({ group: userAuth.user.level.name, expire: userAuth.expire });
+      location.href = '/';
     }
   };
 
   onMount(async () => {
-    console.log(await (await fetch('/api/auth/login')).json());
+    const userAuth = await (await fetch('/api/auth/login')).json();
+    storage.set({ group: userAuth.user.level.name, expire: userAuth.expire });
   });
 </script>
 

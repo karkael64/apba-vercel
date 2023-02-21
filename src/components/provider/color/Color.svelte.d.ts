@@ -1,5 +1,5 @@
 import type { AnyObject } from '$lib/client';
-import { SvelteComponentTyped } from 'svelte';
+import { type SvelteComponent, SvelteComponentTyped } from 'svelte';
 
 declare class Color extends SvelteComponentTyped<
   { defaultColorScheme?: 'light' | 'dark' },

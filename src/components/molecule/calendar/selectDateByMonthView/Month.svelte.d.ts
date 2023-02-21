@@ -10,10 +10,11 @@ declare class Month extends SvelteComponentTyped<
   },
   {
     click: SvelteEvent<Date>;
-    edityear: Event;
-    editmonth: Event;
+    editYear: Event;
+    editMonth: Event;
     previous: Event;
     next: Event;
+    today: Event;
   }
 > {}
 

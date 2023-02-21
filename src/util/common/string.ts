@@ -90,3 +90,12 @@ export const generateUUID = (version = Math.trunc(Math.random() * 6)) => {
     3
   )}-${generateHash(12)}`;
 };
+
+export const tryParseJson = (text: string) => {
+  try {
+    return JSON.parse(text);
+  } catch {
+    // do nothing
+  }
+  return text;
+};

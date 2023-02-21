@@ -1,8 +1,5 @@
 import { SvelteComponentTyped } from 'svelte';
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export type SectionPlainProps = {};
-
-declare class SectionPlain extends SvelteComponentTyped<SectionPlainProps> {}
+declare class SectionPlain extends SvelteComponentTyped<{ body?: string }> {}
 
 export default SectionPlain;

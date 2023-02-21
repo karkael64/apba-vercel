@@ -2,9 +2,10 @@
   export let pin: boolean = false;
   export let number: number;
   export let weak: boolean = false;
+  export let today: boolean = false;
 </script>
 
-<div class="{`day ${pin ? '' : 'hidePin'} ${weak ? 'weak' : ''}`}" on:click>
+<div class="{`day ${pin ? '' : 'hidePin'} ${weak ? 'weak' : ''} ${today ? 'today' : ''}`}" on:click>
   <span class="number">{number}</span>
   <span class="pin"></span>
 </div>
@@ -44,5 +45,9 @@
 
   .weak {
     opacity: 0.4;
+  }
+
+  .today {
+    background: var(--minus);
   }
 </style>

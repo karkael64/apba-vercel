@@ -1,14 +1,16 @@
 <script lang="ts">
-  import { Color, Nav, Footer } from '$lib/client';
+  import { Color, Nav, Footer, Storage } from '$lib/client';
   import '../app.css';
 </script>
 
-<Color />
-<Nav />
-<main>
-  <slot />
-</main>
-<Footer />
+<Storage>
+  <Color />
+  <Nav />
+  <main>
+    <slot />
+  </main>
+  <Footer />
+</Storage>
 
 <style>
   main {

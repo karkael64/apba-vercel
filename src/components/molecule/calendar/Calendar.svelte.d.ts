@@ -5,12 +5,13 @@ type View = 'date' | 'week' | 'month' | 'year';
 
 declare class Calendar extends SvelteComponentTyped<
   {
-    originView?: View;
-    date?: Date;
+    anchorDate: Date;
+    view?: View;
     events?: Date[];
   },
   {
     click: SvelteEvent<Date>;
+    changeAnchorDate: SvelteEvent<Date>;
   }
 > {}
 

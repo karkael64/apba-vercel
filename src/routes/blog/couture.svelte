@@ -9,16 +9,15 @@
   ];
 </script>
 
-<SectionPlain>
-  <h1>Coûture</h1>
-  <p>
-    L'association APBA propose des activités de coûture régulièrement dans ses locaux au square
-    Lulli. Nous vous donnons rendez-vous !
-  </p>
-  <p>
-    Au travers cette activité, vous pouvez apprendre à coudre, à broder, à border, faire des
-    aisances, des ourlets, des patronages...
-  </p>
-</SectionPlain>
+<SectionPlain
+  body="{`
+# Coûture
+
+L'association APBA propose des activités de coûture régulièrement dans ses locaux au square
+Lulli. Nous vous donnons rendez-vous !
+
+Au travers cette activité, vous pouvez apprendre à coudre, à broder, à border, faire des
+aisances, des ourlets, des patronages...
+`}" />
 
 <Carrousel pictures="{pictures}" duration="{2000}" />

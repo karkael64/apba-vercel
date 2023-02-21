@@ -16,26 +16,18 @@
 
   onMount(() => {
     colorScheme.subscribe((value) => {
-      if (!el || !el.sheet) {
-        return;
-      }
-      if (index !== undefined) {
-        el.sheet.deleteRule(index);
-      }
+      if (!el || !el.sheet) return;
+      if (index !== undefined) el.sheet.deleteRule(index);
       el.parentNode?.appendChild(el);
       if (value === 'light') {
         index = el.sheet.insertRule(`:root {${colorsToCssVar(light)}\n}`);
-        localStorage.setItem('color-scheme', 'light');
       } else if (value === 'dark') {
         index = el.sheet.insertRule(`:root {${colorsToCssVar(dark)}\n}`);
-        localStorage.setItem('color-scheme', 'dark');
       } else {
-        const localStorageColorScheme = localStorage.getItem('color-scheme') as 'light' | 'dark';
         const userPreferColorScheme = window.matchMedia('(prefers-color-scheme: light)').matches
           ? 'light'
           : 'dark';
-        const setColorScheme =
-          defaultColorScheme || localStorageColorScheme || userPreferColorScheme;
+        const setColorScheme = defaultColorScheme || userPreferColorScheme;
         colorScheme.set(setColorScheme === 'light' ? 'light' : 'dark');
       }
     });

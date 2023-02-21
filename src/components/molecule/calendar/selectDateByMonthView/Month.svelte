@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { dateToString, getMonthName } from '$lib/client';
+  import { dateToString, getMonthName, today, daysCountBetween } from '$lib/client';
   import { createEventDispatcher } from 'svelte';
   import Day from './Day.svelte';
 
@@ -34,6 +34,7 @@
   const monthDayClick = (date: Date) => () => dispatch('click', date);
   const previousMonthClick = () => dispatch('previous');
   const nextMonthClick = () => dispatch('next');
+  const goToday = () => dispatch('today');
 
   const displayPin = (date: Date) => {
     const matchDate = dateToString(date);
@@ -42,8 +43,14 @@
 </script>
 
 <div class="month">
-  <div class="year-selector" on:click="{() => dispatch('edityear')}">{year}</div>
-  <div class="month-selector" on:click="{() => dispatch('editmonth')}">{getMonthName(month)}</div>
+  <div class="year-selector">
+    <span on:click="{() => dispatch('editYear')}">{year}</span>
+  </div>
+  <div class="month-selector">
+    <button class="button" on:click="{previousMonthClick}">&larr;</button>
+    <span on:click="{() => dispatch('editMonth')}">{getMonthName(month)}</span>
+    <button class="button" on:click="{nextMonthClick}">&rarr;</button>
+  </div>
   <div class="week-days">
     {#if isWeekStartingWithSunday}
       <span class="weak" title="Dimanche">D</span>
@@ -78,11 +85,13 @@
           <Day
             number="{date.getDate()}"
             pin="{displayPin(date)}"
-            on:click="{monthDayClick(date)}" />
+            on:click="{monthDayClick(date)}"
+            today="{daysCountBetween(date, today) === 0}" />
         {/if}
       </div>
     {/each}
   </div>
+  <button class="button" on:click="{goToday}">↪ aller à ajourd'hui</button>
 </div>
 
 <style>
@@ -91,24 +100,35 @@
     flex-direction: column;
   }
 
-  .year-selector {
+  .year-selector,
+  .month-selector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-size: 1.5em;
     text-align: center;
-    cursor: pointer;
-    opacity: 1;
   }
-  .year-selector:hover {
+
+  .year-selector > span,
+  .month-selector > span {
+    cursor: pointer;
+    margin: 0 0.5rem;
     opacity: 0.8;
   }
 
-  .month-selector {
-    font-size: 1.5em;
-    text-align: center;
+  .button {
+    border: none;
+    background: none;
+    color: var(--positive);
     cursor: pointer;
-    opacity: 1;
-  }
-  .month-selector:hover {
     opacity: 0.8;
+    font-weight: bold;
+  }
+
+  .year-selector > span:hover,
+  .month-selector > span:hover,
+  .button:hover {
+    opacity: 1;
   }
 
   .week-days {

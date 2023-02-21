@@ -6,5 +6,4 @@
 </script>
 
 <Button shape="circle" color="secondary" on:click="{toggleColorScheme}"
-  >{$colorScheme === 'light' ? '☀️' : '🌘'}</Button
->
+  >{$colorScheme === 'light' ? '☀️' : '🌙'}</Button>

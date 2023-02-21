@@ -6,7 +6,9 @@ export {
   getMonthName,
   getWeek,
   getWeekFirstDay,
-  getYearFirstDate
+  getYearFirstDate,
+  daysCountBetween,
+  today
 } from './date';
 export {
   expectBetween,
@@ -43,6 +45,7 @@ export {
   isUuid,
   stringFromBinary,
   stringToBinary,
-  stringToHash
+  stringToHash,
+  tryParseJson
 } from './string';
 export { customEventListener } from './event';

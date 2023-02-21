@@ -1,2 +1,3 @@
-import { writable } from 'svelte/store';
-export const colorScheme = writable<'light' | 'dark'>();
+import { makeStorage } from '$lib/client';
+
+export const colorScheme = makeStorage<'light' | 'dark' | null | undefined>('color-scheme');

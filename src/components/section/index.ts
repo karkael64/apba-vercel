@@ -11,10 +11,12 @@ export const modelValidation = {
   SectionSplash: isValidSectionSplash,
   SectionThumbs: isValidSectionThumbs
 };
+
 export const modelErrors = {
   SectionPlain: hasErrorsSectionPlain,
   SectionSplash: hasErrorsSectionSplash,
   SectionThumbs: hasErrorsSectionThumbs
 };
+
 export const isModelName = (el: string): el is keyof typeof modelValidation =>
   el in modelValidation;

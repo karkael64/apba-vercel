@@ -14,9 +14,7 @@ export type ConnectedUser = {
   };
 };
 
-export const getConnectedUser = async ({
-  locals: { userid: token }
-}: RequestEvent): Promise<ConnectedUser | null> => {
+export const getConnectedUser = async (token: string): Promise<ConnectedUser | null> => {
   if (token) {
     const userAuth = await client.userAuth.findFirst({
       where: { token },

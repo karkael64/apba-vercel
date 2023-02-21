@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { cookieParse } from '$lib/client';
-  import { onMount } from 'svelte';
+  import { groupStorage, isString } from '$lib/client';
+  import type { Writable } from 'svelte/store';
   import { MenuButton } from '../../atoms';
   import { ImageLoader, SwitchColor } from '../../molecule';
 
-  let open = false;
+  let isOpen = false;
 
   const prevent = (ev: Event) => {
     ev.stopPropagation();
@@ -12,16 +12,21 @@
 
   const toggleOpen = (ev: Event) => {
     prevent(ev);
-    open = !open;
+    isOpen = !isOpen;
   };
 
   const close = (ev: MouseEvent) => {
     prevent(ev);
-    open = false;
+    isOpen = false;
   };
 
-  onMount(() => {
-    console.log(cookieParse(document.cookie));
+  type InferWritable<T> = T extends Writable<infer S> ? S : never;
+  let group: InferWritable<typeof groupStorage> = '';
+
+  groupStorage.subscribe((value) => {
+    if (isString(value)) {
+      group = value ?? '';
+    }
   });
 </script>
 
@@ -36,7 +41,7 @@
           <SwitchColor />
         </div>
         <div class="menu-button">
-          <MenuButton open="{open}" on:click="{toggleOpen}" />
+          <MenuButton open="{isOpen}" on:click="{toggleOpen}" />
         </div>
       </div>
       <div class="big-list">
@@ -55,19 +60,22 @@
           <li>
             <SwitchColor />
           </li>
-          <li>
-            <a href="/logout">Déconnexion</a>
-          </li>
-          <li>
-            <a href="/login">Connexion</a>
-          </li>
-          <li>
-            <a href="/profile">Paramètres</a>
-          </li>
+          {#if group}
+            <li>
+              <a href="/profile">Paramètres</a>
+            </li>
+            <li>
+              <a href="/logout">Déconnexion</a>
+            </li>
+          {:else}
+            <li>
+              <a href="/login">Connexion</a>
+            </li>
+          {/if}
         </ul>
       </div>
     </div>
-    <div class="{`mobile-list ${open ? 'open' : ''}`}">
+    <div class="{`mobile-list ${isOpen ? 'open' : ''}`}">
       <ul on:click="{close}">
         <li>
           <a href="/">APBA - Accueil</a>
@@ -78,15 +86,18 @@
         <li>
           <a href="/contact">Contact</a>
         </li>
-        <li>
-          <a href="/logout">Déconnexion</a>
-        </li>
-        <li>
-          <a href="/login">Connexion</a>
-        </li>
-        <li>
-          <a href="/profile">Paramètres</a>
-        </li>
+        {#if group}
+          <li>
+            <a href="/profile">Paramètres</a>
+          </li>
+          <li>
+            <a href="/logout">Déconnexion</a>
+          </li>
+        {:else}
+          <li>
+            <a href="/login">Connexion</a>
+          </li>
+        {/if}
       </ul>
     </div>
   </nav>
