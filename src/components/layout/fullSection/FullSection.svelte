@@ -1,7 +1,6 @@
 <script lang="ts">
-  import type { CSSObject } from '$lib/client';
-  import { objectToStyleString } from '$lib/client';
-  import ImageLoader from '../../molecule/imageLoader/ImageLoader.svelte';
+  import { type CSSObject, objectToStyleString } from '../../../util/client';
+  import { ImageLoader } from '../../molecule';
 
   export let backgroundImage: string | undefined = undefined;
   export let backgroundFilter: string | undefined = undefined;

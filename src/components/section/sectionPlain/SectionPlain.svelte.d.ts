@@ -1,5 +1,11 @@
+import type { SvelteEvent } from '$lib/server';
 import { SvelteComponentTyped } from 'svelte';
 
-declare class SectionPlain extends SvelteComponentTyped<{ body?: string }> {}
+export type SectionPlainProps = { body?: string };
+
+declare class SectionPlain extends SvelteComponentTyped<
+  SectionPlainProps,
+  { save: SvelteEvent<string> }
+> {}
 
 export default SectionPlain;

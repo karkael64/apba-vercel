@@ -1,5 +1,5 @@
 <script lang="ts">
-  import ImageLoader from '../../molecule/imageLoader/ImageLoader.svelte';
+  import { ImageLoader } from '../../molecule';
 
   export let picturePosition = 'top';
   export let pictureUrl: string;

@@ -1,4 +1,4 @@
-import type { SvelteEvent } from '$lib/client';
+import type { SvelteEvent } from '../../../util/common';
 import { SvelteComponentTyped } from 'svelte';
 
 declare class Month extends SvelteComponentTyped<

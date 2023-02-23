@@ -24,8 +24,7 @@ export const post = handleRequest<
     user: { email, name, password, levelId }
   } = await request.json();
 
-  const errors = checkUserParam({ email, name, password, levelId }, false);
-
+  const errors = checkUserParam({ email, name, password }, false);
   if (errors.length) {
     throw HttpCode.badRequest(errors);
   }
@@ -34,9 +33,6 @@ export const post = handleRequest<
   const data = objectRemoveUndefined({ email, levelId, name, password: encodedPassword });
 
   const user = await client.user.create({ data });
-  const { id } = user;
-  return {
-    status: 302,
-    headers: { location: `/api/users/${id}` }
-  };
+
+  throw HttpCode.redirect(`/api/users/${user.id}`);
 });

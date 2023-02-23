@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { SvelteEvent } from '$lib/client';
+  import type { SvelteEvent } from '../../../util/common';
   import { createEventDispatcher } from 'svelte';
 
   import SelectDateByMonth from './selectDateByMonthView/Month.svelte';

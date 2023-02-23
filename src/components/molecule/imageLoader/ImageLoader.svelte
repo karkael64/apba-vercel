@@ -6,8 +6,8 @@
   export let transitionDuration: number = 0.6;
   export let filter: string | number | undefined = undefined;
 
-  import IntersectionObserver from '../../layout/intersectionObserver/IntersectionObserver.svelte';
-  import Image from '../../atoms/image/Image.svelte';
+  import { IntersectionObserver } from '../../layout';
+  import { Image } from '../../atoms';
 </script>
 
 <IntersectionObserver once="{true}" width="{width}" height="{height}" let:intersecting>

@@ -12,21 +12,19 @@
 </script>
 
 <script lang="ts">
-  import { SectionThumbs, SectionSplash, type prisma } from '$lib/client';
+  import { Section, type prisma } from '$lib/client';
   export let blog: null | (prisma.Blog & { sections: prisma.BlogSection[] });
+
+  blog?.sections.sort((a, b) => a.order - b.order);
 </script>
 
 <div>
-  <h3>{blog?.title}</h3>
-  <p>{blog?.body}</p>
+  {#if blog?.title}<h3>{blog?.title}</h3>{/if}
+  {#if blog?.body}<p>{blog?.body}</p>{/if}
 </div>
 
 {#if blog?.sections}
   {#each blog.sections as section (section.id)}
-    {#if section.model === 'SectionThumbs'}
-      <SectionThumbs {...JSON.parse(section.json)} />
-    {:else if section.model === 'SectionSplash'}
-      <SectionSplash {...JSON.parse(section.json)} />
-    {/if}
+    <Section section="{section}" />
   {/each}
 {/if}

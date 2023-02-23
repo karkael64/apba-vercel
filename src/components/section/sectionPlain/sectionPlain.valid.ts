@@ -1,7 +1,11 @@
 import type { SectionPlainProps } from './SectionPlain.svelte';
-import type { AnyObject } from '$lib/client';
-import type { JSONSchemaFromType } from '$lib/client';
-import { expectString, isValid, hasErrors } from '$lib/client';
+import {
+  type AnyObject,
+  type JSONSchemaFromType,
+  expectString,
+  isValid,
+  hasErrors
+} from '../../../util/common';
 
 const schemaSectionPlain: JSONSchemaFromType<SectionPlainProps> = {
   properties: { body: expectString() },

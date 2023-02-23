@@ -1,3 +1,3 @@
-import { makeStorage } from '$lib/client';
+import { makeStorage } from '../../../util/client';
 
-export const colorScheme = makeStorage<'light' | 'dark' | null | undefined>('color-scheme');
+export const colorScheme = makeStorage('color-scheme');

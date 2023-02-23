@@ -1,44 +1,31 @@
 <script lang="ts">
-  import Markdown from '../../molecule/markdown/Markdown.svelte';
-  import Button from '../../atoms/button/Button.svelte';
-  import ThumbDefinition from '../../layout/thumbDefinition/ThumbDefinition.svelte';
-  import EditorButton from '../../molecule/editorButton/EditorButton.svelte';
-  import type { SvelteEvent } from '$lib/client';
-
-  type Thumb = {
-    pictureUrl: string;
-    pictureAlt: string;
-    buttonHref?: string;
-    buttonLabel?: string;
-    buttonColor?: 'primary' | 'secondary';
-    body?: string;
-  };
+  import { Button } from '../../atoms';
+  import { Markdown } from '../../molecule';
+  import { ThumbDefinition } from '../../layout';
+  import type { Thumb } from './SectionThumbs.svelte';
+  import SectionThumbsEditor from './SectionThumbsEditor.svelte';
 
   export let thumbs: Thumb[];
-
-  const makeSaveBody = (id: number) => (ev: SvelteEvent<string>) => {
-    const thumb = thumbs.at(id);
-    if (thumb) thumb.body = ev.detail;
-  };
 </script>
 
 <div class="flex">
   {#each thumbs as thumb, id}
     <ThumbDefinition pictureUrl="{thumb.pictureUrl}" pictureAlt="{thumb.pictureAlt}">
       <Markdown content="{thumb.body ?? ''}" />
-      <EditorButton markdown="{thumb.body}" on:save="{makeSaveBody(id)}" />
       {#if thumb.buttonHref}
         <center>
           <Button href="{thumb.buttonHref}" color="{thumb.buttonColor ?? 'primary'}"
-            >{thumb.buttonLabel ?? 'Plus de détails…'}</Button>
+            >{thumb.buttonLabel}</Button>
         </center>
       {/if}
     </ThumbDefinition>
   {/each}
+  <SectionThumbsEditor thumbs="{thumbs}" on:save />
 </div>
 
 <style>
   .flex {
+    position: relative;
     display: flex;
     justify-content: space-evenly;
     align-items: flex-start;

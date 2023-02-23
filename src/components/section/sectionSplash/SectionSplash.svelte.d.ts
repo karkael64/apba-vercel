@@ -1,14 +1,18 @@
 import { SvelteComponentTyped } from 'svelte';
-import type { ButtonProps } from '../../atoms/buttons/Buttons.svelte';
+import { type ButtonProps } from '../../atoms';
+import { type PictureEditorProps } from '../../editor';
 
 export type SectionSplashProps = {
   buttonList: ButtonProps[];
-  backgroundImages: string[];
+  backgroundImages: PictureEditorProps[];
   height?: string;
   body?: string;
-  variant?: 'left';
+  variant?: 'left' | 'right';
 };
 
-declare class SectionSplash extends SvelteComponentTyped<SectionSplashProps> {}
+declare class SectionSplash extends SvelteComponentTyped<
+  SectionSplashProps,
+  { save: SvelteEvent<string> }
+> {}
 
 export default SectionSplash;

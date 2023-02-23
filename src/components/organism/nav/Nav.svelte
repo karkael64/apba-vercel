@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { groupStorage, isString } from '$lib/client';
-  import type { Writable } from 'svelte/store';
+  import { groupStorage } from '../../../util/client';
   import { MenuButton } from '../../atoms';
   import { ImageLoader, SwitchColor } from '../../molecule';
 
@@ -20,13 +19,9 @@
     isOpen = false;
   };
 
-  type InferWritable<T> = T extends Writable<infer S> ? S : never;
-  let group: InferWritable<typeof groupStorage> = '';
-
-  groupStorage.subscribe((value) => {
-    if (isString(value)) {
-      group = value ?? '';
-    }
+  let group = '';
+  groupStorage.subscribe((newGroup) => {
+    group = newGroup;
   });
 </script>
 

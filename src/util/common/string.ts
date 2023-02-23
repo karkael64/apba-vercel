@@ -99,3 +99,5 @@ export const tryParseJson = (text: string) => {
   }
   return text;
 };
+
+export const jsonEquals = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);

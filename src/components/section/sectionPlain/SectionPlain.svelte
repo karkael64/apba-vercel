@@ -1,21 +1,16 @@
 <script lang="ts">
-  import Markdown from '../../molecule/markdown/Markdown.svelte';
+  import { Markdown } from '../../molecule';
   import { FullSection } from '../../layout';
-  import EditorButton from '../../molecule/editorButton/EditorButton.svelte';
-  import type { SvelteEvent } from '$lib/client';
+  import SveltePlainEditor from './SectionPlainEditor.svelte';
 
   export let body = '';
-
-  const onSaveBody = (ev: SvelteEvent<string>) => {
-    body = ev.detail;
-  };
 </script>
 
 <FullSection height="auto">
   <div class="pad">
     <Markdown content="{body}" />
-    <EditorButton markdown="{body}" on:save="{onSaveBody}" inner />
   </div>
+  <SveltePlainEditor body="{body}" on:save />
 </FullSection>
 
 <style>

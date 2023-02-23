@@ -67,14 +67,6 @@ export class HttpCode extends Error {
     this.code = code;
   }
 
-  getCode() {
-    return this.code;
-  }
-
-  static ok() {
-    return new this(200, 'OK');
-  }
-
   static noContent() {
     return new this(204, 'No content');
   }
@@ -93,10 +85,6 @@ export class HttpCode extends Error {
 
   static notFound() {
     return new this(404, 'Not found');
-  }
-
-  static methodNotAllowed() {
-    return new this(405, 'Method not allowed');
   }
 
   static serverError() {
@@ -145,16 +133,9 @@ export const handleRequest =
             body: { message }
           };
         }
-        if (code === 400 && isString(cause)) {
+        if (code === 400 && isBadRequestParamList(cause)) {
           return {
-            status: 302,
-            headers: { location: cause },
-            body: { message }
-          };
-        }
-        if (code === 302 && isBadRequestParamList(cause)) {
-          return {
-            status: 302,
+            status: 400,
             body: {
               message,
               errors: cause
@@ -179,7 +160,7 @@ export const stringToHashPepper = (text: string) => stringToHash(PEPPER + text);
 
 export type JsonOutput<T> = T extends Date | (new (...args: any) => { toJSON: any })
   ? string
-  : T extends symbol | ((...args: any[]) => any)
+  : T extends void | undefined | symbol | ((...args: any[]) => any)
   ? never
   : T extends AnyObject
   ? { [k in keyof T]: JsonOutput<T[k]> }

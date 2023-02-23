@@ -1,6 +1,6 @@
 <script>
   import { colorScheme } from '../../provider/color/colorScheme';
-  import Button from '../../atoms/button/Button.svelte';
+  import { Button } from '../../atoms';
   const toggleColorScheme = () =>
     colorScheme.update((current) => (current === 'light' ? 'dark' : 'light'));
 </script>

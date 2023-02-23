@@ -1,6 +1,7 @@
 export { default as SectionSplash } from './sectionSplash/SectionSplash.svelte';
 export { default as SectionThumbs } from './sectionThumbs/SectionThumbs.svelte';
 export { default as SectionPlain } from './sectionPlain/SectionPlain.svelte';
+export { default as Section } from './Section.svelte';
 
 import { hasErrorsSectionPlain, isValidSectionPlain } from './sectionPlain/sectionPlain.valid';
 import { hasErrorsSectionSplash, isValidSectionSplash } from './sectionSplash/sectionSplash.valid';

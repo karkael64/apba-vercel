@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { objectToStyleString } from '$lib/client';
+  import { objectToStyleString } from '../../../util/client';
 
   export let src: string;
   export let alt: string;

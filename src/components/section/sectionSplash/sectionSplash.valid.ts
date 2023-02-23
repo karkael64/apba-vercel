@@ -1,14 +1,14 @@
-import type { ButtonProps } from '../../atoms/buttons/Buttons.svelte';
+import type { ButtonProps } from '../../atoms';
 import type { SectionSplashProps } from './SectionSplash.svelte';
-import type { AnyObject } from '$lib/client';
 import {
   expectBetween,
   expectString,
-  expectStringList,
   isValid,
   hasErrors,
-  type JSONSchemaFromType
-} from '$lib/client';
+  type JSONSchemaFromType,
+  type AnyObject
+} from '../../../util/common';
+import type { PictureEditorProps } from '../../editor';
 
 const schemaButton: JSONSchemaFromType<ButtonProps> = {
   properties: {
@@ -19,13 +19,21 @@ const schemaButton: JSONSchemaFromType<ButtonProps> = {
   required: []
 };
 
+const schemaImage: JSONSchemaFromType<PictureEditorProps> = {
+  properties: {
+    url: expectString(),
+    alt: expectString()
+  },
+  required: ['url', 'alt']
+};
+
 const schemaSectionSplash: JSONSchemaFromType<SectionSplashProps> = {
   properties: {
-    backgroundImages: expectStringList(),
+    backgroundImages: { type: 'array', items: schemaImage },
     buttonList: { type: 'array', items: schemaButton },
     body: expectString(),
     height: expectString(),
-    variant: expectBetween(['left'])
+    variant: expectBetween(['left', 'right'])
   },
   required: ['buttonList', 'backgroundImages']
 };

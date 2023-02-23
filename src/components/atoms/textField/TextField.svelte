@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { customEventListener } from '$lib/client';
+  import { customEventListener } from '../../../util/common';
   import { createEventDispatcher, onMount } from 'svelte';
 
   export let type: string;

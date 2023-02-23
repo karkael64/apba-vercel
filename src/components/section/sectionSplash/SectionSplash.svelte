@@ -1,38 +1,39 @@
 <script lang="ts">
-  import Markdown from '../../molecule/markdown/Markdown.svelte';
-  import type { ButtonProps } from '../../atoms/buttons/Buttons.svelte';
-  import Buttons from '../../atoms/buttons/Buttons.svelte';
-  import FullSection from '../../layout/fullSection/FullSection.svelte';
-  import ImageLoader from '../../molecule/imageLoader/ImageLoader.svelte';
-  import EditorButton from '../../molecule/editorButton/EditorButton.svelte';
-  import type { SvelteEvent } from '$lib/client';
+  import { type ButtonProps, Buttons } from '../../atoms';
+  import { Markdown, ImageLoader } from '../../molecule';
+  import { FullSection } from '../../layout';
+  import SectionSplashEditor from './SectionSplashEditor.svelte';
+  import type { PictureEditorProps } from 'src/components/editor';
+  import type { SectionSplashProps } from './SectionSplash.svelte';
 
   export let buttonList: ButtonProps[];
-  export let backgroundImages: string[];
+  export let backgroundImages: PictureEditorProps[];
   export let height = '80vh';
   export let body = '';
-  export let variant = '';
-
-  const onSaveBody = (ev: SvelteEvent<string>) => {
-    body = ev.detail;
-  };
+  export let variant: SectionSplashProps['variant'] = 'right';
 </script>
 
 <FullSection height="{height}">
   <div class="split-background">
-    {#each backgroundImages as backgroundImage}
+    {#each backgroundImages as { url, alt }}
       <div>
-        <ImageLoader src="{backgroundImage}" alt="" width="100%" height="100%" />
+        <ImageLoader src="{url}" alt="{alt}" width="100%" height="100%" />
       </div>
     {/each}
   </div>
   <div class="{`splash ${variant}`}">
     <Markdown content="{body}" />
-    <EditorButton markdown="{body}" on:save="{onSaveBody}" />
     <div class="splash-button">
       <Buttons list="{buttonList}" />
     </div>
   </div>
+  <SectionSplashEditor
+    buttonList="{buttonList}"
+    backgroundImages="{backgroundImages}"
+    height="{height}"
+    body="{body}"
+    variant="{variant}"
+    on:save />
 </FullSection>
 
 <style>
@@ -61,7 +62,8 @@
   }
 
   @media only screen and (min-width: 1000px) {
-    .splash {
+    .splash,
+    .splash.right {
       right: 10em;
       margin: 0;
       padding: 2em 3em;

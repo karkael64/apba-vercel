@@ -1,4 +1,4 @@
-import type { AnyObject } from '$lib/client';
+import type { AnyObject } from '../../../util/common';
 import { SvelteComponentTyped } from 'svelte';
 
 declare class Storage extends SvelteComponentTyped<

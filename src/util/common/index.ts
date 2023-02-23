@@ -43,6 +43,7 @@ export {
   isString,
   isUri,
   isUuid,
+  jsonEquals,
   stringFromBinary,
   stringToBinary,
   stringToHash,

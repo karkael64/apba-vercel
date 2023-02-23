@@ -22,14 +22,18 @@
           body: JSON.stringify({ username: usernameValue, password: passwordValue })
         })
       ).json()) as JsonOutput<ConnectedUser>;
-      storage.set({ group: userAuth.user.level.name, expire: userAuth.expire });
+      storage.set({ userAuth: JSON.stringify(userAuth) });
       location.href = '/';
     }
   };
 
   onMount(async () => {
     const userAuth = await (await fetch('/api/auth/login')).json();
-    storage.set({ group: userAuth.user.level.name, expire: userAuth.expire });
+    if (userAuth.token) {
+      storage.set({ userAuth: JSON.stringify(userAuth) });
+    } else {
+      storage.set({ userAuth: undefined });
+    }
   });
 </script>
 

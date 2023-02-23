@@ -1,4 +1,4 @@
-import type { AnyObject } from '$lib/server';
+import type { AnyObject } from '../../../util/common';
 import { type SvelteComponent, SvelteComponentTyped } from 'svelte';
 
 declare class Portal extends SvelteComponentTyped<

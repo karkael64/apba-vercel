@@ -6,11 +6,14 @@ export type Thumb = {
   buttonHref?: string;
   buttonLabel?: string;
   buttonColor?: 'primary' | 'secondary';
-  body?: string;
+  body: string;
 };
 
 export type SectionThumbsProps = { thumbs: Thumb[] };
 
-declare class SectionThumbs extends SvelteComponentTyped<SectionThumbsProps> {}
+declare class SectionThumbs extends SvelteComponentTyped<
+  SectionThumbsProps,
+  { save: SvelteEvent<string> }
+> {}
 
 export default SectionThumbs;

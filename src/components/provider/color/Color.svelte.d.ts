@@ -1,4 +1,4 @@
-import type { AnyObject } from '$lib/client';
+import type { AnyObject } from '../../../util/common';
 import { type SvelteComponent, SvelteComponentTyped } from 'svelte';
 
 declare class Color extends SvelteComponentTyped<

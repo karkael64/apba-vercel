@@ -6,7 +6,7 @@ import {
   isValid,
   type AnyObject,
   type JSONSchemaFromType
-} from '$lib/client';
+} from '../../../util/common';
 
 const schemaThumb: JSONSchemaFromType<Thumb> = {
   properties: {

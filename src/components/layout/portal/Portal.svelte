@@ -17,7 +17,7 @@
 
 <script lang="ts">
   import { onMount } from 'svelte';
-  export let container: HTMLElement;
+  export let container: HTMLElement | undefined = undefined;
 
   onMount(() => {
     if (!container) {

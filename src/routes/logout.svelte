@@ -4,7 +4,7 @@
 
   onMount(async () => {
     await fetch('/api/auth/logout');
-    storage.set({ group: null, expire: null });
+    storage.set({ userAuth: undefined });
     setTimeout(() => (location.href = '/'), 2000);
   });
 </script>
