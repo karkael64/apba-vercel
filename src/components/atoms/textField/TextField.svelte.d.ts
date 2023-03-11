@@ -4,7 +4,7 @@ declare class TextField extends SvelteComponentTyped<
   {
     type: string;
     name: string;
-    label: string;
+    label?: string;
     value?: string;
     /** error can be an empty string to hold a space after input */
     error?: string;

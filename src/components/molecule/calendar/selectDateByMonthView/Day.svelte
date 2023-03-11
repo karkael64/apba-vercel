@@ -1,17 +1,34 @@
 <script lang="ts">
+  import { createEventDispatcher } from 'svelte';
+
   export let pin: boolean = false;
   export let number: number;
   export let weak: boolean = false;
   export let today: boolean = false;
+
+  const dispatch = createEventDispatcher();
+
+  const handleKeydown = (ev: KeyboardEvent) => {
+    if (['space', 'enter'].includes(ev.code.toLowerCase())) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      dispatch('click');
+    }
+  };
 </script>
 
-<div class="{`day ${pin ? '' : 'hidePin'} ${weak ? 'weak' : ''} ${today ? 'today' : ''}`}" on:click>
+<div
+  tabindex="0"
+  class="{`day ${pin ? '' : 'hidePin'} ${weak ? 'weak' : ''} ${today ? 'today' : ''}`}"
+  on:click
+  on:keydown="{handleKeydown}">
   <span class="number">{number}</span>
   <span class="pin"></span>
 </div>
 
 <style>
   .day {
+    outline: 1px solid transparent;
     display: flex;
     justify-content: flex-end;
     align-items: flex-start;
@@ -26,6 +43,10 @@
 
   .day.hidePin .pin {
     opacity: 0;
+  }
+
+  .day:focus {
+    outline: 1px solid var(--primary);
   }
 
   .pin {

@@ -1,29 +1,12 @@
 import type { SvelteEvent } from '../../../util/common';
 import { SvelteComponentTyped } from 'svelte';
+import type { prisma } from '$lib/server';
 
-export type File = {
-  url: string;
-  thumb: string;
-  type: string;
-  title: string;
-};
-
-export type Event = {
-  date: Date;
-  body: string;
-};
-
-export type Occurence = {
-  date: Date;
-  body: string;
-  event: {
-    body: string;
-  };
-};
+export type Occurence = prisma.EventOccurence & { serie: prisma.EventSerie };
 
 declare class Agenda extends SvelteComponentTyped<
   {
-    events?: (Event | Occurence)[];
+    events?: (prisma.Event | Occurence)[];
     isWeekStartingWithSunday?: true;
   },
   {

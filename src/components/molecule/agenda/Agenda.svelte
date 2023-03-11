@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { prisma } from '$lib/server';
   import {
     dateToString,
     getDayName,
@@ -6,8 +7,9 @@
     getWeek,
     getWeekFirstDay
   } from '../../../util/common';
-  import type { Event, Occurence } from './Agenda.svelte';
   import AgendaItem from './AgendaItem.svelte';
+
+  type Occurence = prisma.EventOccurence & { serie: prisma.EventSerie };
 
   type EventsTree = {
     week: number;
@@ -16,28 +18,28 @@
     dates: {
       date: Date;
       dateString: string;
-      singleEvents: Event[];
+      singleEvents: prisma.Event[];
       occurenceEvents: Occurence[];
     }[];
   };
 
-  export let events: (Event | Occurence)[] = [];
+  export let events: (prisma.Event | Occurence)[] = [];
   export let isWeekStartingWithSunday = false;
 
-  const isOccurence = (el: Event | Occurence): el is Occurence =>
-    'event' in el && el.event && typeof el.event === 'object';
+  const isOccurence = (el: prisma.Event | Occurence): el is Occurence =>
+    'serie' in el && el.serie && typeof el.serie === 'object';
 
   let groupedEvents: EventsTree[];
   $: groupedEvents =
     events
-      ?.sort((eventA, eventB) => eventA.date.valueOf() - eventB.date.valueOf())
+      ?.sort((eventA, eventB) => eventA.start.valueOf() - eventB.start.valueOf())
       .reduce((acc, event) => {
-        const week = getWeek(event.date, isWeekStartingWithSunday);
-        const date = dateToString(event.date);
+        const week = getWeek(event.start, isWeekStartingWithSunday);
+        const date = dateToString(event.start);
 
         let weekRange = acc.find((item) => item.week === week);
         if (!weekRange) {
-          const weekFirstDay = getWeekFirstDay(event.date, isWeekStartingWithSunday);
+          const weekFirstDay = getWeekFirstDay(event.start, isWeekStartingWithSunday);
           const weekLastDay = new Date(weekFirstDay);
           weekLastDay.setDate(weekLastDay.getDate() + 6);
 
@@ -47,7 +49,12 @@
 
         let dateRange = weekRange.dates.find((item) => item.dateString === date);
         if (!dateRange) {
-          dateRange = { date: event.date, dateString: date, singleEvents: [], occurenceEvents: [] };
+          dateRange = {
+            date: event.start,
+            dateString: date,
+            singleEvents: [],
+            occurenceEvents: []
+          };
           weekRange.dates.push(dateRange);
         }
 

@@ -50,11 +50,11 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    border-radius: 0.5rem;
     width: 50rem;
     max-height: 80%;
     background-color: var(--negative);
     border: 1px solid var(--medium);
+    border-radius: 0.5rem;
   }
 
   @media only screen and (max-width: 999px) {

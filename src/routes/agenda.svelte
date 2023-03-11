@@ -2,32 +2,44 @@
   import {
     Agenda,
     Calendar,
+    DatePicker,
     dateToString,
     type SvelteEvent,
-    type Event,
     type Occurence,
-    Button
+    Button,
+    type prisma
   } from '$lib/client';
 
   let today = new Date();
   let anchorDate = new Date(today);
 
-  const globalEvents = Array.from({ length: 3 }, (): Occurence['event'] => ({
-    body: '# markdown-it rulezz!\n\nthis is my body'
+  const generateId = () => Math.abs(Math.floor(Math.random() * Number.MAX_SAFE_INTEGER));
+
+  const globalEvents = Array.from({ length: 3 }, (): Occurence['serie'] => ({
+    body: '# markdown-it rulezz!\n\nthis is my body',
+    authorId: 1,
+    id: generateId(),
+    title: 'Jardinage'
   }));
 
   const occurences = globalEvents.reduce((acc, ev) => {
     acc.push(
       ...Array.from(
         { length: 5 },
-        (): Occurence => ({
-          body: '# markdown-it rulezz!\n\nthis is my body, Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat tempora facere, esse a enim hic animi ab, dolorum fugiat iste, maxime voluptate consequuntur saepe nemo iusto nam nihil id inventore! ',
-          date: new Date(
+        (
+          start: Date = new Date(
             today.getFullYear(),
             today.getMonth(),
-            today.getDate() + Math.round(Math.random() * 60 - Math.random() * 60)
-          ),
-          event: ev
+            today.getDate() + Math.round(Math.random() * 30 - Math.random() * 30)
+          )
+        ): Occurence => ({
+          body: '# markdown-it rulezz!\n\nthis is my body, Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat tempora facere, esse a enim hic animi ab, dolorum fugiat iste, maxime voluptate consequuntur saepe nemo iusto nam nihil id inventore! ',
+          start,
+          serie: ev,
+          authorId: 1,
+          end: new Date(start.valueOf() + 2 * 60 * 60 * 1000),
+          id: generateId(),
+          serieId: ev.id
         })
       )
     );
@@ -36,18 +48,24 @@
 
   const entries = Array.from(
     { length: 20 },
-    (): Event => ({
-      date: new Date(
+    (
+      start: Date = new Date(
         today.getFullYear(),
         today.getMonth(),
-        today.getDate() + Math.round(Math.random() * 60 - Math.random() * 60)
-      ),
-      body: '# markdown-it rulezz!\n\nthis is my body, Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat tempora facere, esse a enim hic animi ab, dolorum fugiat iste, maxime voluptate consequuntur saepe nemo iusto nam nihil id inventore! '
+        today.getDate() + Math.round(Math.random() * 30 - Math.random() * 30)
+      )
+    ): prisma.Event => ({
+      start: start,
+      end: new Date(start.valueOf() + 2 * 60 * 60 * 1000),
+      body: '# markdown-it rulezz!\n\nthis is my body, Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat tempora facere, esse a enim hic animi ab, dolorum fugiat iste, maxime voluptate consequuntur saepe nemo iusto nam nihil id inventore! ',
+      authorId: 1,
+      id: generateId(),
+      title: 'Jardinage'
     })
   );
 
   const all = [...occurences, ...entries];
-  const events = all.map((ev) => ev.date);
+  const events = all.map((ev) => ev.start);
 
   const redirect = (ev: SvelteEvent<Date>) => {
     const node = document.querySelector(
@@ -65,6 +83,8 @@
     anchorDate = dt;
   };
 </script>
+
+<DatePicker label="Date" name="date" />
 
 <div class="agenda">
   <Calendar on:click="{redirect}" events="{events}" bind:anchorDate />

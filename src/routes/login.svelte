@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { ConnectedUser, JsonOutput } from '$lib/server';
-  import { TextField, Button, storage, type prisma } from '$lib/client';
+  import { TextField, Button, storage } from '$lib/client';
   import { onMount } from 'svelte';
 
   let usernameValue = '';

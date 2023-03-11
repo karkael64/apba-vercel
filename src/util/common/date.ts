@@ -1,13 +1,24 @@
+import { modulo } from './number';
+
 const FORMAT_DATE = 'YYYY-MM-DD';
 const FORMAT_DATETIME = 'YYYY-MM-DD HH:mm:ss';
 
 const mapDateFormatConvert: Record<string, (date: Date) => string> = {
   YYYY: (date) => date.getFullYear().toString().padStart(4, '0'),
+  MMMM: (date) => getMonthName(date.getMonth()),
+  MMM: (date) => getMonthName(date.getMonth()).substring(0, 3),
   MM: (date) => (date.getMonth() + 1).toString().padStart(2, '0'),
+  M: (date) => date.getMonth().toString(),
   DD: (date) => date.getDate().toString().padStart(2, '0'),
+  D: (date) => date.getDate().toString(),
   HH: (date) => date.getHours().toString().padStart(2, '0'),
+  H: (date) => date.getHours().toString(),
   mm: (date) => date.getMinutes().toString().padStart(2, '0'),
-  ss: (date) => date.getSeconds().toString().padStart(2, '0')
+  m: (date) => date.getMinutes().toString(),
+  ss: (date) => date.getSeconds().toString().padStart(2, '0'),
+  s: (date) => date.getSeconds().toString(),
+  N: (date) => getDayName(date.getDay()),
+  w: (date) => getDayName(date.getDay())
 };
 
 export const formatDateLocal = (anyDate: Date | string | number, pattern: string) => {
@@ -15,9 +26,11 @@ export const formatDateLocal = (anyDate: Date | string | number, pattern: string
   if (Number.isNaN(date.valueOf())) {
     return '';
   }
-  return Object.keys(mapDateFormatConvert).reduce(
-    (acc, pair) => acc.replace(pair, () => mapDateFormatConvert[pair](date)),
+  return (
     pattern
+      .match(/(.)\1+|./g)
+      ?.map((pair) => (pair in mapDateFormatConvert ? mapDateFormatConvert[pair](date) : pair))
+      .join('') ?? pattern
   );
 };
 
@@ -53,52 +66,29 @@ export const getWeek = (date: Date = new Date(), isWeekStartingWithSunday = fals
   return Math.floor((weekFirstDay - yearFirstDate) / 7);
 };
 
-export const getMonthName = (month: number) => {
-  switch (month) {
-    case 0:
-      return 'Janvier';
-    case 1:
-      return 'Février';
-    case 2:
-      return 'Mars';
-    case 3:
-      return 'Avril';
-    case 4:
-      return 'Mai';
-    case 5:
-      return 'Juin';
-    case 6:
-      return 'Juillet';
-    case 7:
-      return 'Août';
-    case 8:
-      return 'Septembre';
-    case 9:
-      return 'Octobre';
-    case 10:
-      return 'Novembre';
-  }
-  return 'Décembre';
-};
+const monthsName = [
+  'Janvier',
+  'Février',
+  'Mars',
+  'Avril',
+  'Mai',
+  'Juin',
+  'Juillet',
+  'Août',
+  'Septembre',
+  'Octobre',
+  'Novembre',
+  'Décembre'
+] as const;
 
-export const getDayName = (day: number) => {
-  switch (day) {
-    case 0:
-      return 'Dimanche';
-    case 1:
-      return 'Lundi';
-    case 2:
-      return 'Mardi';
-    case 3:
-      return 'Mercredi';
-    case 4:
-      return 'Jeudi';
-    case 5:
-      return 'Vendredi';
-    case 6:
-      return 'Samedi';
-  }
-};
+export const getMonthName = (month: number) => monthsName[modulo(month, monthsName.length)];
+export const getMonthNumberByName = (month: typeof monthsName[number] & string) =>
+  monthsName.indexOf(month);
+
+const daysName = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'] as const;
+
+export const getDayName = (day: number) => daysName[modulo(day, daysName.length)];
+export const getDayNumberByName = (day: typeof daysName[number] & string) => daysName.indexOf(day);
 
 export const daysCountBetween = (
   before: Date | string | number | null,

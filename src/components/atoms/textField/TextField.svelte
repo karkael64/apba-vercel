@@ -4,7 +4,7 @@
 
   export let type: string;
   export let name: string;
-  export let label: string;
+  export let label: string | undefined = undefined;
   export let value: string = '';
   export let error: string | undefined = undefined;
   export let placeholder: string | undefined = undefined;
@@ -46,13 +46,16 @@
 
   let shrink: boolean;
   $: {
-    shrink = placeholder === undefined && !focus && inputRef?.value.length <= 0;
+    shrink =
+      placeholder === undefined && !focus && value?.length <= 0 && inputRef?.value.length <= 0;
   }
 </script>
 
 <label>
-  <span class="label-placeholder">&nbsp;</span>
-  <span class="{`label-text ${shrink ? 'inner' : ''}`}">{label}</span>
+  {#if label !== undefined}
+    <span class="label-placeholder">&nbsp;</span>
+    <span class="{`label-text${shrink ? ' inner' : ''}`}">{label}</span>
+  {/if}
   <input
     bind:this="{inputRef}"
     value="{value}"
@@ -63,7 +66,7 @@
     on:focus="{onFocus}"
     on:blur="{onBlur}" />
   {#if error !== undefined}
-    <span class="{`error ${error ? 'active' : ''}`}">{error}</span>
+    <span class="{`error${error ? ' active' : ''}`}">{error}</span>
   {/if}
 </label>
 
@@ -72,7 +75,6 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    padding-bottom: 1rem;
   }
   span.label-placeholder {
     opacity: 0;

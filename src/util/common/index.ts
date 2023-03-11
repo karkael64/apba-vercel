@@ -1,5 +1,6 @@
 export type { AnyArray, AnyObject, Falsy, Truthy, SvelteEvent } from './ambient';
 export {
+  formatDateLocal,
   dateToString,
   getDayName,
   getMonthFirstDate,
@@ -50,3 +51,4 @@ export {
   tryParseJson
 } from './string';
 export { customEventListener } from './event';
+export { modulo } from './number';

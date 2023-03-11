@@ -1,16 +1,17 @@
 <script lang="ts">
+  import type { prisma } from '$lib/server';
   import Markdown from '../markdown/Markdown.svelte';
-  import type { Event, Occurence } from './Agenda.svelte';
+  import type { Occurence } from './Agenda.svelte';
 
-  const isOccurence = (el: Event | Occurence): el is Occurence =>
-    'event' in el && el.event && typeof el.event === 'object';
+  const isOccurence = (el: prisma.Event | Occurence): el is Occurence =>
+    'serie' in el && el.serie && typeof el.serie === 'object';
 
-  export let event: Event | Occurence;
+  export let event: prisma.Event | Occurence;
 </script>
 
 {#if isOccurence(event)}
   <div class="occurence">
-    <Markdown content="{event.event.body}" />
+    <Markdown content="{event.serie.body}" />
     <Markdown content="{event.body}" />
   </div>
 {:else}

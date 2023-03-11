@@ -17,16 +17,19 @@ model Post {
 }
 
 model User {
-  id       Int       @id @default(autoincrement())
-  email    String    @unique
-  name     String?
-  posts    Post[]
-  blogs    Blog[]
-  files    File[]
-  auths    UserAuth[]
-  level    UserLevel @relation(fields: [levelId], references: [id])
-  levelId  Int
-  password String
+  id              Int       @id @default(autoincrement())
+  email           String    @unique
+  name            String?
+  posts           Post[]
+  blogs           Blog[]
+  files           File[]
+  events          Event[]
+  eventSeries     EventSerie[]
+  eventOccurences EventOccurence[]
+  auths           UserAuth[]
+  level           UserLevel @relation(fields: [levelId], references: [id])
+  levelId         Int
+  password        String
 }
 
 model UserLevel {
@@ -37,8 +40,8 @@ model UserLevel {
 
 model UserAuth {
   id     Int      @id @default(autoincrement())
-  user   User     @relation(fields: [userId], references: [id])
   userId Int
+  user   User     @relation(fields: [userId], references: [id])
   expire DateTime
   token  String   @unique
   ip     String
@@ -46,12 +49,12 @@ model UserAuth {
 
 model Blog {
   id       Int           @id @default(autoincrement())
-  author   User          @relation(fields: [authorId], references: [id])
   authorId Int
+  author   User          @relation(fields: [authorId], references: [id])
   slug     String        @unique
   title    String
   body     String
-  files    File[]
+  files    MapBlogFile[]
   sections BlogSection[]
 }
 
@@ -60,16 +63,83 @@ model BlogSection {
   order  Int
   model  String
   json   String
-  blog   Blog   @relation(fields: [blogId], references: [id])
   blogId Int
+  blog   Blog   @relation(fields: [blogId], references: [id])
 }
 
 model File {
-  id       Int    @id @default(autoincrement())
-  path     String
-  url      String
-  author   User   @relation(fields: [authorId], references: [id])
+  id              Int    @id @default(autoincrement())
+  path            String
+  url             String
+  authorId        Int
+  author          User   @relation(fields: [authorId], references: [id])
+  blogs           MapBlogFile[]
+  events          MapEventFile[]
+  eventSeries     MapEventSerieFile[]
+  eventOccurences MapEventOccurenceFile[]
+}
+
+model Event {
+  id       Int      @id @default(autoincrement())
   authorId Int
-  blog     Blog?  @relation(fields: [blogId], references: [id])
-  blogId   Int?
+  author   User     @relation(fields: [authorId], references: [id])
+  title    String
+  body     String
+  start    DateTime
+  end      DateTime
+  files    MapEventFile[]
+}
+
+model EventSerie {
+  id         Int               @id @default(autoincrement())
+  authorId   Int
+  author     User              @relation(fields: [authorId], references: [id])
+  title      String
+  body       String
+  occurences EventOccurence[]
+  files      MapEventSerieFile[]
+}
+
+model EventOccurence {
+  id       Int        @id @default(autoincrement())
+  authorId Int
+  author   User       @relation(fields: [authorId], references: [id])
+  body     String
+  start    DateTime
+  end      DateTime
+  serieId  Int
+  serie    EventSerie @relation(fields: [serieId], references: [id])
+  files    MapEventOccurenceFile[]
+}
+
+model MapBlogFile {
+  id      Int  @id @default(autoincrement())
+  blogId  Int
+  blog    Blog @relation(fields: [blogId], references: [id])
+  fileId  Int
+  file    File @relation(fields: [fileId], references: [id])
+}
+
+model MapEventFile {
+  id      Int   @id @default(autoincrement())
+  eventId Int
+  event   Event @relation(fields: [eventId], references: [id])
+  fileId  Int
+  file    File  @relation(fields: [fileId], references: [id])
+}
+
+model MapEventSerieFile {
+  id           Int        @id @default(autoincrement())
+  eventSerieId Int
+  eventSerie   EventSerie @relation(fields: [eventSerieId], references: [id])
+  fileId       Int
+  file         File       @relation(fields: [fileId], references: [id])
+}
+
+model MapEventOccurenceFile {
+  id               Int            @id @default(autoincrement())
+  eventOccurenceId Int
+  eventOccurence   EventOccurence @relation(fields: [eventOccurenceId], references: [id])
+  fileId           Int
+  file             File           @relation(fields: [fileId], references: [id])
 }

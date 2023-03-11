@@ -40,6 +40,14 @@
     const matchDate = dateToString(date);
     return !!monthEvents.find((ev) => dateToString(ev) === matchDate);
   };
+
+  const handleKeydown = (evName: string) => (ev: KeyboardEvent) => {
+    if (['space', 'enter'].includes(ev.code.toLowerCase())) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      dispatch('click');
+    }
+  };
 </script>
 
 <div class="month">
@@ -117,18 +125,24 @@
   }
 
   .button {
+    outline: 1px solid transparent;
     border: none;
+    border-radius: 2px;
     background: none;
     color: var(--positive);
     cursor: pointer;
     opacity: 0.8;
-    font-weight: bold;
   }
 
   .year-selector > span:hover,
   .month-selector > span:hover,
+  .button:focus,
   .button:hover {
     opacity: 1;
+  }
+
+  .button:focus {
+    outline: 1px solid var(--primary);
   }
 
   .week-days {
