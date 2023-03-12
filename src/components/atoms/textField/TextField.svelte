@@ -109,6 +109,7 @@
     margin: 0.25rem 0;
     border-radius: 0.25rem;
     text-overflow: ellipsis;
+    width: 16rem;
   }
   input:autofill,
   input:-webkit-autofill,

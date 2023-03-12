@@ -2,13 +2,13 @@
   import {
     Agenda,
     Calendar,
-    DatePicker,
-    TimePicker,
+    TextField,
     dateToString,
     type SvelteEvent,
     type Occurence,
     Button,
-    type prisma
+    type prisma,
+    Select
   } from '$lib/client';
 
   let today = new Date();

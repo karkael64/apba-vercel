@@ -40,14 +40,6 @@
     const matchDate = dateToString(date);
     return !!monthEvents.find((ev) => dateToString(ev) === matchDate);
   };
-
-  const handleKeydown = (evName: string) => (ev: KeyboardEvent) => {
-    if (['space', 'enter'].includes(ev.code.toLowerCase())) {
-      ev.preventDefault();
-      ev.stopPropagation();
-      dispatch('click');
-    }
-  };
 </script>
 
 <div class="month">
