@@ -1,38 +1,10 @@
 <script lang="ts">
+  import { getMonthName } from '../../../../util/common';
   import { createEventDispatcher, onMount } from 'svelte';
 
   export let month: number = 0;
 
   const dispatch = createEventDispatcher();
-
-  const getMonthName = (month: number) => {
-    switch (month) {
-      case 0:
-        return 'Janvier';
-      case 1:
-        return 'Février';
-      case 2:
-        return 'Mars';
-      case 3:
-        return 'Avril';
-      case 4:
-        return 'Mai';
-      case 5:
-        return 'Juin';
-      case 6:
-        return 'Juillet';
-      case 7:
-        return 'Août';
-      case 8:
-        return 'Septembre';
-      case 9:
-        return 'Octobre';
-      case 10:
-        return 'Novembre';
-      default:
-        return 'Décembre';
-    }
-  };
 
   const months = Array.from({ length: 12 });
 
@@ -45,7 +17,7 @@
       (child: Element) => child.textContent === monthName
     );
     const scrollTop = item.offsetTop - (scroller.clientHeight - item.clientHeight) / 2;
-    scroller.scrollTo({ top: scrollTop, behavior: 'smooth' });
+    scroller.scrollTo({ top: scrollTop });
   });
 </script>
 
@@ -73,5 +45,13 @@
 
   .scroll > div:hover {
     opacity: 0.8;
+  }
+
+  .scroll > div:first-child {
+    padding-top: 1rem;
+  }
+
+  .scroll > div:last-child {
+    padding-bottom: 1rem;
   }
 </style>

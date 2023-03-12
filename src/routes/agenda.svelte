@@ -3,6 +3,7 @@
     Agenda,
     Calendar,
     DatePicker,
+    TimePicker,
     dateToString,
     type SvelteEvent,
     type Occurence,
@@ -83,8 +84,6 @@
     anchorDate = dt;
   };
 </script>
-
-<DatePicker label="Date" name="date" />
 
 <div class="agenda">
   <Calendar on:click="{redirect}" events="{events}" bind:anchorDate />

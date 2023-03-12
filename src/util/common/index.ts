@@ -52,3 +52,4 @@ export {
 } from './string';
 export { customEventListener } from './event';
 export { modulo } from './number';
+export { throttle } from './function';

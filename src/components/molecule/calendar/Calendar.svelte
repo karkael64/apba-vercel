@@ -59,8 +59,10 @@
 <div class="calendar">
   {#if view === 'year'}
     <SelectYear year="{anchorDate.getFullYear()}" on:select="{onYearSelect}" />
+    <div class="molette"></div>
   {:else if view === 'month'}
     <SelectMonth month="{anchorDate.getMonth()}" on:select="{onMonthSelect}" />
+    <div class="molette"></div>
   {:else if view === 'week'}
     <span>Week view</span>
   {:else if view === 'date'}
@@ -81,16 +83,28 @@
   .calendar {
     font-size: 1rem;
 
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
 
     width: 20em;
     height: 18em;
-    padding: 1em;
     border: 1px solid var(--minus);
     border-radius: 0.5em;
 
     user-select: none;
+  }
+
+  .molette {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    user-select: none;
+    pointer-events: none;
+    box-shadow: inset 0 0 1rem 1rem var(--negative);
   }
 </style>

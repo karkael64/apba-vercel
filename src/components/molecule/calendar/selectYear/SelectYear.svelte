@@ -46,4 +46,12 @@
   .scroll > div:hover {
     opacity: 0.8;
   }
+
+  .scroll > div:first-child {
+    padding-top: 1rem;
+  }
+
+  .scroll > div:last-child {
+    padding-bottom: 1rem;
+  }
 </style>
