@@ -8,9 +8,13 @@ declare class Agenda extends SvelteComponentTyped<
   {
     events?: (prisma.Event | Occurence)[];
     isWeekStartingWithSunday?: true;
+    admin?: boolean;
   },
   {
     click: SvelteEvent<Date>;
+    editEvent: SvelteEvent<number>;
+    editEventOccurence: SvelteEvent<number>;
+    editEventSerie: SvelteEvent<number>;
   }
 > {}
 

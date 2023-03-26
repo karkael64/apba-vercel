@@ -1,4 +1,5 @@
 export * from './atoms';
+export * from './editor';
 export * from './layout';
 export * from './molecule';
 export * from './organism';

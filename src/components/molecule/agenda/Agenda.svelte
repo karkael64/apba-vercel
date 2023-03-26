@@ -25,6 +25,7 @@
 
   export let events: (prisma.Event | Occurence)[] = [];
   export let isWeekStartingWithSunday = false;
+  export let admin = false;
 
   const isOccurence = (el: prisma.Event | Occurence): el is Occurence =>
     'serie' in el && el.serie && typeof el.serie === 'object';
@@ -87,12 +88,22 @@
           </h3>
           <div class="occurences">
             {#each dateRange.occurenceEvents as occurence}
-              <AgendaItem event="{occurence}" />
+              <AgendaItem
+                event="{occurence}"
+                admin="{admin}"
+                on:editEvent
+                on:editEventOccurence
+                on:editEventSerie />
             {/each}
           </div>
           <div class="singles">
             {#each dateRange.singleEvents as single}
-              <AgendaItem event="{single}" />
+              <AgendaItem
+                event="{single}"
+                admin="{admin}"
+                on:editEvent
+                on:editEventOccurence
+                on:editEventSerie />
             {/each}
           </div>
         </div>

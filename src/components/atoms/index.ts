@@ -6,4 +6,4 @@ export { default as Image } from './image/Image.svelte';
 export { default as MenuButton } from './menuButton/MenuButton.svelte';
 export { default as TextArea } from './textArea/TextArea.svelte';
 export { default as TextField } from './textField/TextField.svelte';
-export { default as Select } from './select/Select.svelte';
+export { default as Select, type SelectOptions } from './select/Select.svelte';

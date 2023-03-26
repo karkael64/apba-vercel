@@ -18,11 +18,6 @@
     prevent(ev);
     isOpen = false;
   };
-
-  let group = '';
-  groupStorage.subscribe((newGroup) => {
-    group = newGroup;
-  });
 </script>
 
 <svelte:window on:click="{close}" />
@@ -55,7 +50,7 @@
           <li>
             <SwitchColor />
           </li>
-          {#if group}
+          {#if $groupStorage}
             <li>
               <a href="/profile">Paramètres</a>
             </li>
@@ -81,7 +76,7 @@
         <li>
           <a href="/contact">Contact</a>
         </li>
-        {#if group}
+        {#if $groupStorage}
           <li>
             <a href="/profile">Paramètres</a>
           </li>

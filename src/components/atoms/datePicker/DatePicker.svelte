@@ -4,13 +4,13 @@
   import { formatDateLocal, type SvelteEvent } from '../../../util/common';
   import { createEventDispatcher } from 'svelte';
 
-  export let label: string;
+  export let label: string | undefined = undefined;
   export let name: string;
   export let value: Date | undefined = undefined;
   export let format: string | undefined = undefined;
 
   let isOpen = false;
-  let anchorDate = new Date();
+  let anchorDate = value ? new Date(value) : new Date();
 
   const dispatch = createEventDispatcher();
 
@@ -25,9 +25,17 @@
   };
 
   const onClick = (ev: SvelteEvent<Date>) => {
-    value = ev.detail;
+    if (value) {
+      const newDate = new Date(value);
+      newDate.setFullYear(ev.detail.getFullYear());
+      newDate.setMonth(ev.detail.getMonth());
+      newDate.setDate(ev.detail.getDate());
+      value = newDate;
+    } else {
+      value = ev.detail;
+    }
     isOpen = false;
-    dispatch('change', ev.detail);
+    dispatch('change', value);
   };
 
   const onPrevent = (ev: Event) => {
@@ -44,6 +52,7 @@
     on:focus="{onOpen}"
     value="{value && (format ? formatDateLocal(value, format) : value.toLocaleDateString())}" />
   {#if isOpen}
+    <div class="handler" on:click="{onClose}"></div>
     <div class="relative">
       <Calendar bind:anchorDate on:click="{onClick}" />
     </div>
@@ -65,5 +74,13 @@
     background-color: var(--negative);
     border: 1px solid var(--medium);
     border-radius: 0.5rem;
+  }
+  .handler {
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
   }
 </style>

@@ -1,4 +1,4 @@
-export type { AnyArray, AnyObject, Falsy, Truthy, SvelteEvent } from './ambient';
+export type { AnyArray, AnyObject, Falsy, Truthy, SvelteEvent, JsonOutput } from './ambient';
 export {
   formatDateLocal,
   dateToString,
@@ -9,7 +9,8 @@ export {
   getWeekFirstDay,
   getYearFirstDate,
   daysCountBetween,
-  today
+  today,
+  todayNoon
 } from './date';
 export {
   expectBetween,
@@ -45,6 +46,7 @@ export {
   isUri,
   isUuid,
   jsonEquals,
+  makeQueryString,
   stringFromBinary,
   stringToBinary,
   stringToHash,

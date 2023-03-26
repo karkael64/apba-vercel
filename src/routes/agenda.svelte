@@ -1,72 +1,36 @@
 <script lang="ts">
   import {
     Agenda,
-    Calendar,
-    TextField,
-    dateToString,
-    type SvelteEvent,
-    type Occurence,
     Button,
+    Calendar,
+    dateToString,
+    EventAdd,
+    EventEdit,
+    EventOccurenceAdd,
+    EventOccurenceEdit,
+    EventSerieAdd,
+    EventSerieEdit,
+    type SvelteEvent,
     type prisma,
-    Select
+    groupStorage,
+    makeQueryString,
+    type JsonOutput
   } from '$lib/client';
+  import { onMount } from 'svelte';
 
-  let today = new Date();
-  let anchorDate = new Date(today);
+  type EventFull = prisma.Event & {
+    files: prisma.MapEventFile[];
+  };
 
-  const generateId = () => Math.abs(Math.floor(Math.random() * Number.MAX_SAFE_INTEGER));
+  type EventOccurenceFull = prisma.EventOccurence & {
+    files: prisma.MapEventOccurenceFile[];
+    serie: prisma.EventSerie;
+  };
 
-  const globalEvents = Array.from({ length: 3 }, (): Occurence['serie'] => ({
-    body: '# markdown-it rulezz!\n\nthis is my body',
-    authorId: 1,
-    id: generateId(),
-    title: 'Jardinage'
-  }));
-
-  const occurences = globalEvents.reduce((acc, ev) => {
-    acc.push(
-      ...Array.from(
-        { length: 5 },
-        (
-          start: Date = new Date(
-            today.getFullYear(),
-            today.getMonth(),
-            today.getDate() + Math.round(Math.random() * 30 - Math.random() * 30)
-          )
-        ): Occurence => ({
-          body: '# markdown-it rulezz!\n\nthis is my body, Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat tempora facere, esse a enim hic animi ab, dolorum fugiat iste, maxime voluptate consequuntur saepe nemo iusto nam nihil id inventore! ',
-          start,
-          serie: ev,
-          authorId: 1,
-          end: new Date(start.valueOf() + 2 * 60 * 60 * 1000),
-          id: generateId(),
-          serieId: ev.id
-        })
-      )
-    );
-    return acc;
-  }, [] as Occurence[]);
-
-  const entries = Array.from(
-    { length: 20 },
-    (
-      start: Date = new Date(
-        today.getFullYear(),
-        today.getMonth(),
-        today.getDate() + Math.round(Math.random() * 30 - Math.random() * 30)
-      )
-    ): prisma.Event => ({
-      start: start,
-      end: new Date(start.valueOf() + 2 * 60 * 60 * 1000),
-      body: '# markdown-it rulezz!\n\nthis is my body, Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat tempora facere, esse a enim hic animi ab, dolorum fugiat iste, maxime voluptate consequuntur saepe nemo iusto nam nihil id inventore! ',
-      authorId: 1,
-      id: generateId(),
-      title: 'Jardinage'
-    })
-  );
-
-  const all = [...occurences, ...entries];
-  const events = all.map((ev) => ev.start);
+  let eventSeries: JsonOutput<prisma.EventSerie>[] = [];
+  let anchorDate = new Date();
+  let all: (EventFull | EventOccurenceFull)[] = [];
+  let eventDates: Date[] = [];
 
   const redirect = (ev: SvelteEvent<Date>) => {
     const node = document.querySelector(
@@ -83,15 +47,117 @@
     dt.setMonth(anchorDate.getMonth() + 1);
     anchorDate = dt;
   };
+
+  const loadPeriod = async (year: number, monthIndex: number) => {
+    const start = new Date(year, monthIndex, 1).toJSON();
+    const end = new Date(year, monthIndex + 1, 1).toJSON();
+    const qs = makeQueryString({ start, end });
+
+    const [events, eventOccurences, eventSeries] = await Promise.all([
+      (async (): Promise<JsonOutput<EventFull>[]> =>
+        (
+          await (await fetch(`/api/events${qs}`)).json()
+        ).events)(),
+      (async (): Promise<JsonOutput<EventOccurenceFull>[]> =>
+        (
+          await (await fetch(`/api/events/occurences${qs}`)).json()
+        ).eventOccurences)(),
+      (async (): Promise<JsonOutput<prisma.EventSerie>[]> =>
+        (
+          await (await fetch(`/api/events/series`)).json()
+        ).eventSeries)()
+    ]);
+
+    return {
+      events,
+      eventOccurences,
+      eventSeries
+    };
+  };
+
+  let openEventAdd = false;
+  let openEventOccurenceAdd = false;
+  let openEventSerieAdd = false;
+
+  const addEvent = () => (openEventAdd = true);
+  const addEventOccurence = () => (openEventOccurenceAdd = true);
+  const addEventSerie = () => (openEventSerieAdd = true);
+
+  let openEventEdit: number | null = null;
+  let openEventOccurenceEdit: number | null = null;
+  let openEventSerieEdit: number | null = null;
+
+  const editEvent = (event: SvelteEvent<number>) => (openEventEdit = event.detail);
+  const editEventOccurence = (event: SvelteEvent<number>) =>
+    (openEventOccurenceEdit = event.detail);
+  const editEventSerie = (event: SvelteEvent<number>) => (openEventSerieEdit = event.detail);
+
+  const closeEvent = () => (openEventEdit = null);
+  const closeEventOccurence = () => (openEventOccurenceEdit = null);
+  const closeEventSerie = () => (openEventSerieEdit = null);
+
+  let mounted = false;
+  let dateState: null | Date = null;
+
+  onMount(() => {
+    mounted = true;
+  });
+
+  $: (async () => {
+    if (mounted && dateState !== anchorDate) {
+      dateState = anchorDate;
+      const data = await loadPeriod(anchorDate.getFullYear(), anchorDate.getMonth());
+      eventSeries = data.eventSeries;
+
+      all = [...data.events, ...data.eventOccurences].map((ev): EventFull | EventOccurenceFull => ({
+        ...ev,
+        start: new Date(ev.start),
+        end: new Date(ev.end)
+      }));
+
+      eventDates = all.map(({ start }) => start);
+    }
+  })();
 </script>
 
 <div class="agenda">
-  <Calendar on:click="{redirect}" events="{events}" bind:anchorDate />
-  <Agenda events="{all}" />
+  {#if $groupStorage === 'admin'}
+    <p>
+      <Button color="editor" on:click="{addEventSerie}">Ajouter une nouvelle activité</Button>
+    </p>
+    <p>
+      <Button color="editor" on:click="{addEventOccurence}"
+        >Ajouter des sessions d'une activité</Button>
+    </p>
+    <p>
+      <Button color="editor" on:click="{addEvent}">Ajouter un événement unique</Button>
+    </p>
+  {/if}
+  <Calendar on:click="{redirect}" events="{eventDates}" bind:anchorDate />
+  <Agenda
+    events="{all}"
+    admin="{$groupStorage === 'admin'}"
+    on:editEvent="{editEvent}"
+    on:editEventOccurence="{editEventOccurence}"
+    on:editEventSerie="{editEventSerie}" />
   <p>
-    <Button on:click="{onNextMonthClick}">Mois suivant</Button>
+    <Button on:click="{onNextMonthClick}" color="primary">Mois suivant</Button>
   </p>
 </div>
+
+{#if $groupStorage === 'admin'}
+  <EventAdd bind:open="{openEventAdd}" />
+  <EventEdit eventId="{openEventEdit}" on:close="{closeEvent}" />
+  {#if eventSeries.length}
+    <EventOccurenceAdd bind:open="{openEventOccurenceAdd}" series="{eventSeries}" />
+    <EventOccurenceEdit
+      eventId="{openEventOccurenceEdit}"
+      series="{eventSeries}"
+      on:close="{closeEventOccurence}" />
+  {/if}
+  <EventSerieAdd bind:open="{openEventSerieAdd}" />
+  <EventSerieEdit eventId="{openEventSerieEdit}" on:close="{closeEventSerie}" />
+{/if}
 
 <style>
   .agenda {

@@ -4,7 +4,7 @@ import { SvelteComponentTyped } from 'svelte';
 declare class DatePicker extends SvelteComponentTyped<
   {
     name: string;
-    label: string;
+    label?: string;
     value?: Date;
     format?: string;
   },

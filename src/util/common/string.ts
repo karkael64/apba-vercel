@@ -101,3 +101,14 @@ export const tryParseJson = (text: string) => {
 };
 
 export const jsonEquals = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
+
+export const makeQueryString = (args: AnyObject) =>
+  args && typeof args === 'object' && Object.keys(args)
+    ? '?' +
+      Object.entries(args)
+        .map(
+          ([key, value]) =>
+            `${encodeURIComponent(key)}=${encodeURIComponent(JSON.stringify(value))}`
+        )
+        .join('&')
+    : '';

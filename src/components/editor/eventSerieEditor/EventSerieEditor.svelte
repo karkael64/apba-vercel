@@ -11,6 +11,6 @@
   <h2>Titre</h2>
   <TextField name="title" type="text" bind:value="{title}" />
 
-  <h2>Message</h2>
+  <h2>Description de l'activité</h2>
   <MarkdownEditor bind:markdown="{body}" />
 </form>

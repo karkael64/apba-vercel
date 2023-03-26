@@ -7,3 +7,11 @@ export type SvelteEvent<D = unknown, T extends Element = Element> = Event & {
 };
 export type Falsy = false | '' | 0 | null | undefined;
 export type Truthy<T> = T extends Falsy ? never : T;
+
+export type JsonOutput<T> = T extends Date | (new (...args: any) => { toJSON: any })
+  ? string
+  : T extends void | undefined | symbol | ((...args: any[]) => any)
+  ? never
+  : T extends AnyObject
+  ? { [k in keyof T]: JsonOutput<T[k]> }
+  : T;

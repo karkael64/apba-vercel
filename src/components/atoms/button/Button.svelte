@@ -1,13 +1,28 @@
 <script lang="ts">
-  export let color = 'secondary';
-  export let shape = 'round';
+  import { createEventDispatcher } from 'svelte';
+  import type { ButtonColor, ButtonShape } from './Button.svelte';
+
+  export let color: ButtonColor = 'secondary';
+  export let shape: ButtonShape = 'round';
   export let href: string | undefined = undefined;
+  export let disabled = false;
+
+  const dispatch = createEventDispatcher();
+
+  let classes = '';
+  $: classes = ['button', color, shape, disabled ? 'disabled' : ''].filter((c) => !!c).join(' ');
+
+  const handleClick = () => {
+    if (!disabled) {
+      dispatch('click');
+    }
+  };
 </script>
 
 {#if href}
-  <a href="{href}" type="button" class="{`button ${color} ${shape}`}" on:click><slot /></a>
+  <a href="{href}" type="button" class="{classes}" on:click="{handleClick}"><slot /></a>
 {:else}
-  <button type="button" class="{`button ${color} ${shape}`}" on:click>
+  <button type="button" class="{classes}" disabled="{disabled}" on:click="{handleClick}">
     <slot />
   </button>
 {/if}
@@ -38,23 +53,37 @@
     box-shadow: inset 0 0 1.2em 0 #8888;
   }
 
-  .primary {
+  .button.primary {
     background: var(--primary);
   }
 
-  .secondary {
+  .button.secondary {
     background: var(--secondary);
   }
 
-  .square {
+  .button.square {
     border-radius: none;
   }
 
-  .round {
+  .button.round {
     border-radius: 4px;
   }
 
-  .circle {
+  .button.circle {
     border-radius: 4em;
+  }
+
+  .button.disabled {
+    cursor: default;
+    color: var(--positive);
+    background: var(--minus);
+  }
+
+  .button.editor {
+    background: #eef;
+    color: black;
+    border: grey;
+    border-radius: 1rem;
+    box-shadow: 0 0 1rem 0 #000;
   }
 </style>

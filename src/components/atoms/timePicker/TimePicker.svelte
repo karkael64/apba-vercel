@@ -12,6 +12,8 @@
   let isOpen = false;
   let anchorDate = new Date();
 
+  $: if (value) anchorDate = new Date(value);
+
   const dispatch = createEventDispatcher();
 
   const onOpen = () => {
@@ -25,9 +27,17 @@
   };
 
   const onClick = (ev: SvelteEvent<Date>) => {
-    value = ev.detail;
+    if (value) {
+      const newDate = new Date(ev.detail);
+      newDate.setFullYear(value.getFullYear());
+      newDate.setMonth(value.getMonth());
+      newDate.setDate(value.getDate());
+      value = newDate;
+    } else {
+      value = ev.detail;
+    }
     isOpen = false;
-    dispatch('change', ev.detail);
+    dispatch('change', value);
   };
 
   const onPrevent = (ev: Event) => {
@@ -50,6 +60,7 @@
     on:focus="{onOpen}"
     value="{value && (format ? formatDateLocal(value, format) : value.toLocaleTimeString())}" />
   {#if isOpen}
+    <div class="handler" on:click="{onClose}"></div>
     <div class="relative">
       <TimeSelect bind:anchorDate on:click="{onClick}" />
       <div class="buttons">
@@ -106,5 +117,14 @@
 
   .button:focus {
     outline: 1px solid var(--primary);
+  }
+
+  .handler {
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
   }
 </style>

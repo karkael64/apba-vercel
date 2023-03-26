@@ -1,4 +1,5 @@
 <script context="module" lang="ts">
+  import { userAuth } from '$lib/client';
   import type { Load } from '@sveltejs/kit';
   export const load: Load = async ({ fetch }) => {
     const req = await fetch(`/api/auth/login`);
@@ -13,7 +14,7 @@
 </script>
 
 <script lang="ts">
-  import { Color, Nav, Footer, Storage, userAuth } from '$lib/client';
+  import { Color, Nav, Footer, Storage } from '$lib/client';
   import '../app.css';
 </script>
 

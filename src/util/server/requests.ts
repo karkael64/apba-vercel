@@ -6,7 +6,8 @@ import {
   hasObjectAttribute,
   isObjectValueContained,
   isString,
-  stringToHash
+  stringToHash,
+  tryParseJson
 } from '../common';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -113,14 +114,19 @@ export const handleRequest =
     event: RequestEvent<Params, Body>
   ): Promise<RequestHandlerOutput<Output | OutputError>> => {
     try {
+      const params = Array.from(event.url.searchParams.keys()).reduce((acc, key) => {
+        acc[key] = tryParseJson(event.url.searchParams.get(key) ?? '');
+        return acc;
+      }, {} as AnyObject);
+      const eventWithParams = Object.assign({}, event, { params });
       let userAuth: ConnectedUser | null = null;
       if (logState) {
         userAuth = await getConnectedUser(event.locals.userid);
         const verifyAuth = authorizeMap[logState];
-        if (!verifyAuth?.(userAuth, event)) throw HttpCode.forbidden();
+        if (!verifyAuth?.(userAuth, eventWithParams)) throw HttpCode.forbidden();
       }
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      return await fn(event, userAuth!);
+      return await fn(eventWithParams, userAuth!);
     } catch (error) {
       if (error instanceof HttpCode) {
         const code = error.code;
@@ -157,11 +163,3 @@ export const handleRequest =
 const PEPPER = process?.env.PEPPER || '';
 
 export const stringToHashPepper = (text: string) => stringToHash(PEPPER + text);
-
-export type JsonOutput<T> = T extends Date | (new (...args: any) => { toJSON: any })
-  ? string
-  : T extends void | undefined | symbol | ((...args: any[]) => any)
-  ? never
-  : T extends AnyObject
-  ? { [k in keyof T]: JsonOutput<T[k]> }
-  : T;

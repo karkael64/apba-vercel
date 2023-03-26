@@ -66,7 +66,7 @@ export const getWeek = (date: Date = new Date(), isWeekStartingWithSunday = fals
   return Math.floor((weekFirstDay - yearFirstDate) / 7);
 };
 
-const monthsName = [
+export const monthsName = [
   'Janvier',
   'Février',
   'Mars',
@@ -85,7 +85,15 @@ export const getMonthName = (month: number) => monthsName[modulo(month, monthsNa
 export const getMonthNumberByName = (month: typeof monthsName[number] & string) =>
   monthsName.indexOf(month);
 
-const daysName = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'] as const;
+export const daysName = [
+  'Dimanche',
+  'Lundi',
+  'Mardi',
+  'Mercredi',
+  'Jeudi',
+  'Vendredi',
+  'Samedi'
+] as const;
 
 export const getDayName = (day: number) => daysName[modulo(day, daysName.length)];
 export const getDayNumberByName = (day: typeof daysName[number] & string) => daysName.indexOf(day);
@@ -107,3 +115,13 @@ export const daysCountBetween = (
 };
 
 export const today = new Date();
+
+export const todayNoon = new Date(
+  today.getFullYear(),
+  today.getMonth(),
+  today.getDate(),
+  12,
+  0,
+  0,
+  0
+);

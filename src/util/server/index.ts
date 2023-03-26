@@ -5,6 +5,5 @@ export {
   HttpCode,
   type BadRequestParam,
   type RequestEvent,
-  type RequestHandler,
-  type JsonOutput
+  type RequestHandler
 } from './requests';

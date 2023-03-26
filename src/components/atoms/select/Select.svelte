@@ -1,18 +1,17 @@
 <script lang="ts">
-  import type { AnyObject } from '$lib/server';
   import { createEventDispatcher } from 'svelte';
+  import type { SelectOptions } from './Select.svelte';
 
-  export let formatValue: undefined | ((selectedOptions: AnyObject<string, string>) => string) =
-    undefined;
+  export let formatValue: undefined | ((selectedOptions: SelectOptions) => string) = undefined;
   export let label: string | undefined = undefined;
   export let multiple: boolean = false;
-  export let options: AnyObject<string, string>;
+  export let options: SelectOptions;
   export let placeholder: string | undefined = undefined;
   export let value: string | string[] | undefined = undefined;
 
   let open = false;
   let listValue: string[] = [];
-  let mapValue: AnyObject<string, string> = {};
+  let mapValue: SelectOptions = {};
   let valueDisplay: string = '';
 
   $: {
@@ -20,7 +19,7 @@
     mapValue = listValue.reduce((acc, value) => {
       acc[value] = options[value];
       return acc;
-    }, {} as AnyObject<string, string>);
+    }, {} as SelectOptions);
     valueDisplay = formatValue ? formatValue(mapValue) : Object.values(mapValue).join(', ');
   }
 
@@ -74,6 +73,7 @@
     <div class="{`caret${open ? ' open' : ''}`}">▲</div>
   </div>
   {#if open}
+    <div class="handler" on:click="{handleClose}"></div>
     <div class="dropdown">
       {#each Object.entries(options) as [optionValue, optionLabel] (optionValue)}
         <div
@@ -94,6 +94,7 @@
     display: flex;
     flex-direction: column;
     font-size: 0.875rem;
+    width: 16rem;
   }
 
   .box {
@@ -108,7 +109,6 @@
     border-radius: 0.25rem;
     text-overflow: ellipsis;
     user-select: none;
-    width: 16rem;
     cursor: pointer;
   }
 
@@ -160,19 +160,31 @@
     flex: 0 0 auto;
     animation: 0.2s ease all;
     margin-left: 0.5rem;
+    transform: rotate(180deg);
   }
 
   .caret.open {
-    transform: rotate(180deg);
+    transform: rotate(0);
+  }
+
+  .handler {
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
   }
 
   .dropdown {
     z-index: 1;
     position: absolute;
-    min-width: 100%;
     top: 100%;
     left: 50%;
     transform: translateX(-50%);
+    min-width: 100%;
+    max-height: 50vh;
+    overflow: clip scroll;
 
     margin: 0.25rem 0;
 

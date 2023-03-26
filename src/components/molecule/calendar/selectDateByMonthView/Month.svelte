@@ -91,7 +91,7 @@
       </div>
     {/each}
   </div>
-  <button class="button" on:click="{goToday}">↪ aller à ajourd'hui</button>
+  <button class="button" on:click="{goToday}">↪ aller à aujourd'hui</button>
 </div>
 
 <style>

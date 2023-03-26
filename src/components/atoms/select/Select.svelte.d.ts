@@ -1,12 +1,14 @@
 import type { AnyObject, SvelteEvent } from '$lib/server';
 import { SvelteComponentTyped } from 'svelte';
 
+export type SelectOptions<K extends string = string> = AnyObject<K, string>;
+
 declare class Select<K extends string, B extends boolean = false> extends SvelteComponentTyped<
   {
-    formatValue?: (selectedOptions: AnyObject<string, string>) => string;
+    formatValue?: (selectedOptions: SelectOptions) => string;
     label?: string;
     multiple?: B;
-    options: AnyObject<K, string>;
+    options: SelectOptions<K>;
     placeholder?: string;
     value?: B extends true ? K[] : K;
   },

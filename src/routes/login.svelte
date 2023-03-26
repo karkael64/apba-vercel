@@ -10,7 +10,7 @@
 
   const onSubmit = async () => {
     if (!usernameValue) {
-      usernameError = 'Veuillez écrire un email ou un indentifiant';
+      usernameError = 'Veuillez écrire un email ou un identifiant';
     }
     if (!passwordValue) {
       passwordError = 'Veuillez remplir le mot de passe';

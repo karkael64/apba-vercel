@@ -2,7 +2,6 @@
   import { createEventDispatcher } from 'svelte';
   import Button from '../../atoms/button/Button.svelte';
   import Modal from '../../layout/modal/Modal.svelte';
-  import { groupStorage } from '../../../util/client';
 
   export let open = false;
   export let inner = false;
@@ -22,32 +21,25 @@
   const onClick = () => {
     open = true;
   };
-
-  let group = '';
-  groupStorage.subscribe((newGroup) => {
-    group = newGroup;
-  });
 </script>
 
-{#if group === 'admin'}
-  <button class="{inner ? 'inner' : ''}" on:click="{onClick}">✎</button>
-  <Modal bind:open>
-    <div class="head">
-      <h2>{title}</h2>
-      <div class="head-buttons">
-        <div>
-          <Button color="primary" on:click="{onSave}">Valider &check;</Button>
-        </div>
-        <div>
-          <Button color="secondary" on:click="{onClose}">&cross;</Button>
-        </div>
+<button class="{inner ? 'inner' : ''}" on:click="{onClick}">✎</button>
+<Modal bind:open>
+  <div class="head">
+    <h2>{title}</h2>
+    <div class="head-buttons">
+      <div>
+        <Button color="primary" on:click="{onSave}">Valider &check;</Button>
+      </div>
+      <div>
+        <Button color="secondary" on:click="{onClose}">&cross;</Button>
       </div>
     </div>
-    <div class="content">
-      <slot />
-    </div>
-  </Modal>
-{/if}
+  </div>
+  <div class="content">
+    <slot />
+  </div>
+</Modal>
 
 <style>
   .head {
