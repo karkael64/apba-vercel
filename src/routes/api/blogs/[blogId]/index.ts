@@ -55,11 +55,10 @@ export const checkSectionParam = (
   return errors;
 };
 
-export const get = handleRequest<
-  { blogId: string },
-  never,
-  { blog: null | (prisma.Blog & { sections: prisma.BlogSection[] }) }
->(null, async ({ params: { blogId: slug } }) => {
+export const get = handleRequest<{
+  PathParams: { blogId: string };
+  Output: { blog: null | (prisma.Blog & { sections: prisma.BlogSection[] }) };
+}>(null, async ({ params: { blogId: slug } }) => {
   const id = parseInt(slug);
   if (!isFinite(id)) {
     return {
@@ -76,11 +75,11 @@ export const get = handleRequest<
   };
 });
 
-export const patch = handleRequest<
-  { blogId: string },
-  { blog: Partial<prisma.Blog> },
-  { blog: prisma.Blog }
->('admin', async ({ params: { blogId: id }, request }) => {
+export const patch = handleRequest<{
+  PathParams: { blogId: string };
+  Body: { blog: Partial<prisma.Blog> };
+  Output: { blog: prisma.Blog };
+}>('admin', async ({ params: { blogId: id }, request }) => {
   const {
     blog: { body, title }
   } = await request.json();
@@ -103,7 +102,7 @@ export const patch = handleRequest<
   };
 });
 
-export const del = handleRequest<{ blogId: string }>(
+export const del = handleRequest<{ PathParams: { blogId: string } }>(
   'admin',
   async ({ params: { blogId: id } }) => {
     await client.blog.delete({ where: { id: parseInt(id) } });

@@ -121,19 +121,18 @@ export const checkBlogSectionParam = (blog: Partial<prisma.BlogSection>, partial
   return errors;
 };
 
-export const get = handleRequest<
-  { blogSectionId: string },
-  never,
-  { blog: prisma.BlogSection | null }
->(null, async ({ params: { blogSectionId } }) => ({
+export const get = handleRequest<{
+  PathParams: { blogSectionId: string };
+  Output: { blog: prisma.BlogSection | null };
+}>(null, async ({ params: { blogSectionId } }) => ({
   body: { blog: await client.blogSection.findUnique({ where: { id: parseInt(blogSectionId) } }) }
 }));
 
-export const patch = handleRequest<
-  { blogSectionId: string },
-  { blogSection: Partial<prisma.BlogSection> },
-  { blogSection: prisma.BlogSection }
->('admin', async ({ params: { blogSectionId }, request }) => {
+export const patch = handleRequest<{
+  PathParams: { blogSectionId: string };
+  Body: { blogSection: Partial<prisma.BlogSection> };
+  Output: { blogSection: prisma.BlogSection };
+}>('admin', async ({ params: { blogSectionId }, request }) => {
   const {
     blogSection: { blogId, order, model, json }
   } = await request.json();
@@ -156,7 +155,7 @@ export const patch = handleRequest<
   };
 });
 
-export const del = handleRequest<{ blogSectionId: string }>(
+export const del = handleRequest<{ PathParams: { blogSectionId: string } }>(
   'admin',
   async ({ params: { blogSectionId } }) => {
     await client.blogSection.delete({ where: { id: parseInt(blogSectionId) } });

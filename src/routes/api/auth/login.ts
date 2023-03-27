@@ -9,7 +9,7 @@ import {
   type ConnectedUser
 } from '$lib/server';
 
-export const get = handleRequest<never, never, ConnectedUser>('self', async (event, userAuth) => {
+export const get = handleRequest<{ Output: ConnectedUser }>('self', async (_, userAuth) => {
   if (!userAuth) {
     throw HttpCode.forbidden();
   }
@@ -20,11 +20,10 @@ export const get = handleRequest<never, never, ConnectedUser>('self', async (eve
   };
 });
 
-export const post = handleRequest<
-  never,
-  Partial<{ username: string; password: string }>,
-  ConnectedUser
->(null, async (event) => {
+export const post = handleRequest<{
+  Body: Partial<{ username: string; password: string }>;
+  Output: ConnectedUser;
+}>(null, async (event) => {
   const { username, password } = await event.request.json();
 
   const errors: BadRequestParam[] = [];

@@ -89,7 +89,7 @@ export const checkUserParam = (
   return errors;
 };
 
-export const get = handleRequest<{ uid: string }, never, UserLight | null>(
+export const get = handleRequest<{ PathParams: { uid: string }; Output: UserLight | null }>(
   'self',
   async ({ params: { uid } }) => ({
     body: await client.user.findUnique({
@@ -99,11 +99,11 @@ export const get = handleRequest<{ uid: string }, never, UserLight | null>(
   })
 );
 
-export const patch = handleRequest<
-  { uid: string },
-  { user: Partial<{ email: string; name: string; password: string }> },
-  UserLight
->('self', async ({ params: { uid }, request }) => {
+export const patch = handleRequest<{
+  PathParams: { uid: string };
+  Body: { user: Partial<{ email: string; name: string; password: string }> };
+  Output: UserLight;
+}>('self', async ({ params: { uid }, request }) => {
   const {
     user: { email, name, password }
   } = await request.json();
@@ -126,7 +126,10 @@ export const patch = handleRequest<
   };
 });
 
-export const del = handleRequest<{ uid: string }>('admin', async ({ params: { uid } }) => {
-  await client.user.delete({ where: { id: parseInt(uid) } });
-  throw HttpCode.noContent();
-});
+export const del = handleRequest<{ PathParams: { uid: string } }>(
+  'admin',
+  async ({ params: { uid } }) => {
+    await client.user.delete({ where: { id: parseInt(uid) } });
+    throw HttpCode.noContent();
+  }
+);

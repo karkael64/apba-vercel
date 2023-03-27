@@ -1,5 +1,4 @@
-import { client, type prisma } from '$lib/server';
-import type { RequestEvent } from '@sveltejs/kit';
+import { client, type AnyObject, type prisma, type RequestEvent } from '$lib/server';
 
 const AUTH_DURATION = 36 * 60 * 60 * 1000; // 36 hours
 
@@ -32,7 +31,7 @@ export const getConnectedUser = async (token: string): Promise<ConnectedUser | n
 };
 
 export const createUserAuth = (
-  { locals: { userid: token }, clientAddress: ip }: RequestEvent,
+  { locals: { userid: token }, clientAddress: ip }: RequestEvent<AnyObject, AnyObject, unknown>,
   userId: number
 ): Promise<ConnectedUser> =>
   client.userAuth.upsert({
@@ -57,6 +56,8 @@ export const createUserAuth = (
     }
   });
 
-export const expireUserAuth = async ({ locals: { userid: token } }: RequestEvent) => {
+export const expireUserAuth = async ({
+  locals: { userid: token }
+}: RequestEvent<AnyObject, AnyObject, unknown>) => {
   await client.userAuth.delete({ where: { token } });
 };

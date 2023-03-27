@@ -1,7 +1,7 @@
 import { client } from '$lib/db_instances';
 import { handleRequest, HttpCode, type JsonOutput, type prisma } from '$lib/server';
 
-export const get = handleRequest<never, never, { eventSeries: prisma.EventSerie[] }>(
+export const get = handleRequest<{ Output: { eventSeries: prisma.EventSerie[] } }>(
   null,
   async () => ({
     body: {
@@ -15,14 +15,13 @@ export const get = handleRequest<never, never, { eventSeries: prisma.EventSerie[
         }
       })
     }
-  })
+  }),
+  { outputType: 'eventSeries' }
 );
 
-export const post = handleRequest<
-  never,
-  { eventSerie: Pick<JsonOutput<prisma.EventSerie>, 'title' | 'body'> },
-  never
->('admin', async ({ request }, userAuth) => {
+export const post = handleRequest<{
+  Body: { eventSerie: Pick<JsonOutput<prisma.EventSerie>, 'title' | 'body'> };
+}>('admin', async ({ request }, userAuth) => {
   if (!userAuth) {
     throw HttpCode.forbidden();
   }

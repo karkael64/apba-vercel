@@ -1,4 +1,5 @@
 export { type ConnectedUser, createUserAuth, getConnectedUser, expireUserAuth } from './auth';
+export { makeCache, type CacheHandler } from './cache';
 export {
   handleRequest,
   stringToHashPepper,

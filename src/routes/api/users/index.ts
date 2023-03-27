@@ -7,7 +7,7 @@ import {
 } from '$lib/server';
 import { checkUserParam, type UserLight } from './[uid]';
 
-export const get = handleRequest<never, never, { users: UserLight[] }>('self', async () => ({
+export const get = handleRequest<{ Output: { users: UserLight[] } }>('self', async () => ({
   body: {
     users: await client.user.findMany({
       select: { id: true, email: true, name: true, level: true }
@@ -15,11 +15,9 @@ export const get = handleRequest<never, never, { users: UserLight[] }>('self', a
   }
 }));
 
-export const post = handleRequest<
-  never,
-  { user: Partial<{ email: string; name: string; password: string; levelId: number }> },
-  UserLight
->('admin', async ({ request }) => {
+export const post = handleRequest<{
+  Body: { user: Partial<{ email: string; name: string; password: string; levelId: number }> };
+}>('admin', async ({ request }) => {
   const {
     user: { email, name, password, levelId }
   } = await request.json();

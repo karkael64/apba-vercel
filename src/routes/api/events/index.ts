@@ -10,9 +10,13 @@ type EventFull = prisma.Event & {
   files: prisma.MapEventFile[];
 };
 
-export const get = handleRequest<Partial<QueryParams>, never, { events: EventFull[] }>(
+export const get = handleRequest<{
+  SearchParams: Partial<QueryParams>;
+  Output: { events: EventFull[] };
+  CacheField: 'start' | 'end';
+}>(
   null,
-  async ({ params: { start, end } }) => {
+  async ({ searchParams: { start, end } }) => {
     const startDate = isDate(start) ? new Date(start) : undefined;
     const endDate = isDate(end) ? new Date(end) : undefined;
 
@@ -32,14 +36,20 @@ export const get = handleRequest<Partial<QueryParams>, never, { events: EventFul
         })
       }
     };
+  },
+  {
+    outputType: 'events',
+    fields: ['start', 'end'],
+    getCacheProps: (_, { searchParams: { end, start } }) => ({
+      start: isDate(start) ? new Date(start).toJSON() : 'all',
+      end: isDate(end) ? new Date(end).toJSON() : 'all'
+    })
   }
 );
 
-export const post = handleRequest<
-  never,
-  { event: Pick<JsonOutput<prisma.Event>, 'title' | 'body' | 'start' | 'end'> },
-  never
->('admin', async ({ request }, userAuth) => {
+export const post = handleRequest<{
+  Body: { event: Pick<JsonOutput<prisma.Event>, 'title' | 'body' | 'start' | 'end'> };
+}>('admin', async ({ request }, userAuth) => {
   if (!userAuth) {
     throw HttpCode.forbidden();
   }

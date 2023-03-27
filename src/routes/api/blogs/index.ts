@@ -1,6 +1,6 @@
 import { client, type prisma, handleRequest } from '$lib/server';
 
-export const post = handleRequest<never, { blog: prisma.Blog }, { blog: prisma.Blog }>(
+export const post = handleRequest<{ Body: { blog: prisma.Blog }; Output: { blog: prisma.Blog } }>(
   'admin',
   async ({ request }) => {
     const {
