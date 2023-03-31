@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { groupStorage } from '../../../util/client';
   import { createEventDispatcher } from 'svelte';
   import Button from '../../atoms/button/Button.svelte';
   import Modal from '../../layout/modal/Modal.svelte';
@@ -23,23 +24,25 @@
   };
 </script>
 
-<button class="{inner ? 'inner' : ''}" on:click="{onClick}">✎</button>
-<Modal bind:open>
-  <div class="head">
-    <h2>{title}</h2>
-    <div class="head-buttons">
-      <div>
-        <Button color="primary" on:click="{onSave}">Valider &check;</Button>
-      </div>
-      <div>
-        <Button color="secondary" on:click="{onClose}">&cross;</Button>
+{#if $groupStorage === 'admin'}
+  <button class="{inner ? 'inner' : ''}" on:click="{onClick}">✎</button>
+  <Modal bind:open>
+    <div class="head">
+      <h2>{title}</h2>
+      <div class="head-buttons">
+        <div>
+          <Button color="primary" on:click="{onSave}">Valider &check;</Button>
+        </div>
+        <div>
+          <Button color="secondary" on:click="{onClose}">&cross;</Button>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="content">
-    <slot />
-  </div>
-</Modal>
+    <div class="content">
+      <slot />
+    </div>
+  </Modal>
+{/if}
 
 <style>
   .head {
