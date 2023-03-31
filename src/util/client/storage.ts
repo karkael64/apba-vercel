@@ -1,6 +1,6 @@
 import { readable, writable } from 'svelte/store';
-import { isObject, isString, tryParseJson, type AnyObject } from '../common';
-import type { ConnectedUser, JsonOutput } from '../server';
+import { isObject, isString, tryParseJson, type AnyObject, type JsonOutput } from '../common';
+import type { ConnectedUser } from '../server';
 
 type Storage = { userAuth?: string; 'color-scheme'?: string };
 
@@ -55,6 +55,7 @@ export const makeStorage = (key: keyof Storage) => {
 };
 
 export const userAuthStorage = makeStorage('userAuth');
+
 export const groupStorage = readable('', (set) => {
   userAuthStorage.subscribe((userAuthJson) => {
     if (isString(userAuthJson)) {

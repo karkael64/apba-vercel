@@ -34,14 +34,16 @@
   $: (async () => {
     if (eventId) {
       const resp = await fetch(`/api/events/occurences/${eventId}`);
-      const event: prisma.EventOccurence = (await resp.json()).eventOccurence;
+      if (resp.ok) {
+        const event: prisma.EventOccurence = (await resp.json()).eventOccurence;
 
-      serieId = event.serieId;
-      body = event.body;
-      start = new Date(event.start);
-      end = new Date(event.end);
+        serieId = event.serieId;
+        body = event.body;
+        start = new Date(event.start);
+        end = new Date(event.end);
 
-      open = true;
+        open = true;
+      }
     }
   })();
 

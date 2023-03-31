@@ -5,6 +5,7 @@ import {
   HttpCode,
   isString,
   stringToHashPepper,
+  stringToHashSalt,
   type BadRequestParam,
   type ConnectedUser
 } from '$lib/server';
@@ -64,13 +65,16 @@ export const post = handleRequest<{
     throw HttpCode.badRequest(errors);
   }
 
-  const encodedPassword = stringToHashPepper(password);
+  const pepperPassword = stringToHashPepper(password);
+  const saltPepperPassword = stringToHashPepper(stringToHashSalt(password));
 
   const user = await client.user.findFirst({
     where: {
       OR: [
-        { name: username, password: encodedPassword },
-        { email: username, password: encodedPassword }
+        { name: username, password: pepperPassword },
+        { email: username, password: pepperPassword },
+        { name: username, password: saltPepperPassword },
+        { email: username, password: saltPepperPassword }
       ]
     },
     include: { level: true }

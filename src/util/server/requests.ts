@@ -6,11 +6,11 @@ import {
   hasObjectAttribute,
   isObjectValueContained,
   isString,
-  stringToHash,
   tryParseJson,
   type AnyObject
 } from '../common';
 import { makeCache, type CacheHandler } from './cache';
+import { stringToHashSalt } from '../common/string';
 
 declare type Replace<T, K extends keyof T, U> = Omit<T, K> & { [k in K]: U };
 
@@ -240,4 +240,4 @@ export const handleRequest =
 
 const PEPPER = process?.env.PEPPER || '';
 
-export const stringToHashPepper = (text: string) => stringToHash(PEPPER + text);
+export const stringToHashPepper = (text: string) => stringToHashSalt(PEPPER + text, 32);

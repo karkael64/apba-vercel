@@ -4,12 +4,15 @@
   import type { Load } from '@sveltejs/kit';
   export const load: Load = async ({ fetch }) => {
     const req = await fetch(`/api/blogs/${slug}`);
-    try {
-      const { blog } = await req.json();
-      return { props: { blog } };
-    } catch (e) {
-      return { error: 'Error', status: 500 };
+    if (req.ok) {
+      try {
+        const { blog } = await req.json();
+        return { props: { blog } };
+      } catch {
+        // do nothing
+      }
     }
+    return { error: 'Error', status: 500 };
   };
 </script>
 

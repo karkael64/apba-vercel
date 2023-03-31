@@ -3,11 +3,13 @@
   import type { Load } from '@sveltejs/kit';
   export const load: Load = async ({ fetch }) => {
     const req = await fetch(`/api/auth/login`);
-    try {
-      const userAuthData = await req.json();
-      userAuth.set(userAuthData);
-    } catch (e) {
-      userAuth.set(null);
+    if (req.ok) {
+      try {
+        const userAuthData = await req.json();
+        userAuth.set(userAuthData);
+      } catch (e) {
+        userAuth.set(null);
+      }
     }
     return {};
   };

@@ -26,10 +26,12 @@
   $: (async () => {
     if (eventId) {
       const resp = await fetch(`/api/events/series/${eventId}`);
-      const event: prisma.Event = (await resp.json()).eventSerie;
-      title = event.title;
-      body = event.body;
-      open = true;
+      if (resp.ok) {
+        const event: prisma.Event = (await resp.json()).eventSerie;
+        title = event.title;
+        body = event.body;
+        open = true;
+      }
     }
   })();
 

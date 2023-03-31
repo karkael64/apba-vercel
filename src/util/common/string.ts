@@ -24,7 +24,15 @@ export const stringToHash = (text: string) => {
     const char = text.charCodeAt(i);
     hash = (hash << 5) - hash + char;
   }
-  return Math.abs(hash).toString(16).padStart(8, '0');
+  return Math.abs(hash).toString(16).substring(9, 1).padStart(8, '0');
+};
+
+const SALT = '9badfc34';
+
+export const stringToHashSalt = (text: string, length = 32) => {
+  let hash = '';
+  while (hash.length < length) hash = hash + stringToHash(hash + SALT + text);
+  return hash.substring(0, length);
 };
 
 export const stringToBinary = (text: string) => {

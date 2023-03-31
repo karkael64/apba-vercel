@@ -50,6 +50,7 @@ export {
   stringFromBinary,
   stringToBinary,
   stringToHash,
+  stringToHashSalt,
   tryParseJson
 } from './string';
 export { customEventListener } from './event';

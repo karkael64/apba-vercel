@@ -54,18 +54,21 @@
     const qs = makeQueryString({ start, end });
 
     const [events, eventOccurences, eventSeries] = await Promise.all([
-      (async (): Promise<JsonOutput<EventFull>[]> =>
-        (
-          await (await fetch(`/api/events${qs}`)).json()
-        ).events)(),
-      (async (): Promise<JsonOutput<EventOccurenceFull>[]> =>
-        (
-          await (await fetch(`/api/events/occurences${qs}`)).json()
-        ).eventOccurences)(),
-      (async (): Promise<JsonOutput<prisma.EventSerie>[]> =>
-        (
-          await (await fetch(`/api/events/series`)).json()
-        ).eventSeries)()
+      (async (): Promise<JsonOutput<EventFull>[]> => {
+        const req = await fetch(`/api/events${qs}`);
+        if (!req.ok) throw new Error('Error when fetching events');
+        return (await req.json()).events;
+      })(),
+      (async (): Promise<JsonOutput<EventOccurenceFull>[]> => {
+        const req = await fetch(`/api/events/occurences${qs}`);
+        if (!req.ok) throw new Error('Error when fetching eventOccurences');
+        return (await req.json()).eventOccurences;
+      })(),
+      (async (): Promise<JsonOutput<prisma.EventSerie>[]> => {
+        const req = await fetch(`/api/events/series`);
+        if (!req.ok) throw new Error('Error when fetching eventSeries');
+        return (await req.json()).eventSeries;
+      })()
     ]);
 
     return {

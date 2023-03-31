@@ -1,6 +1,7 @@
 <script lang="ts">
   import { customEventListener } from '../../../util/common';
   import { createEventDispatcher, onMount } from 'svelte';
+  import ErrorSpan from '../errorSpan/ErrorSpan.svelte';
 
   export let type: string;
   export let name: string;
@@ -65,9 +66,7 @@
     on:input="{onInput}"
     on:focus="{onFocus}"
     on:blur="{onBlur}" />
-  {#if error !== undefined}
-    <span class="{`error${error ? ' active' : ''}`}">{error}</span>
-  {/if}
+  <ErrorSpan error="{error}" />
 </label>
 
 <style>
@@ -119,20 +118,5 @@
   }
   input:focus {
     outline: 2px solid var(--primary);
-  }
-  span.error {
-    opacity: 0;
-    color: var(--burntSienna);
-    background: var(--medium);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: 0.875rem;
-    padding: 0 0.5em;
-    border-radius: 0.25rem;
-    height: 1.125em;
-  }
-  span.error.active {
-    opacity: 1;
   }
 </style>
