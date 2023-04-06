@@ -3,6 +3,7 @@
   import SectionThumbs from './sectionThumbs/SectionThumbs.svelte';
   import SectionSplash from './sectionSplash/SectionSplash.svelte';
   import SectionPlain from './sectionPlain/SectionPlain.svelte';
+  import SectionCarrousel from './sectionCarrousel/SectionCarrousel.svelte';
 
   export let section: prisma.BlogSection;
 
@@ -23,4 +24,6 @@
   <SectionSplash {...JSON.parse(section.json)} on:save="{onSave}" />
 {:else if section.model === 'SectionPlain'}
   <SectionPlain {...JSON.parse(section.json)} on:save="{onSave}" />
+{:else if section.model === 'SectionCarrousel'}
+  <SectionCarrousel {...JSON.parse(section.json)} on:save="{onSave}" />
 {/if}

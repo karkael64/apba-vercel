@@ -53,7 +53,6 @@ model Blog {
   author   User          @relation(fields: [authorId], references: [id])
   slug     String        @unique
   title    String
-  body     String
   files    MapBlogFile[]
   sections BlogSection[]
 }

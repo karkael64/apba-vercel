@@ -8,6 +8,22 @@ import {
   type BadRequestParam
 } from '$lib/server';
 
+export const getBlogSlug = async (slug: string) => {
+  const blogId = parseInt(slug);
+  if (isFinite(blogId)) {
+    const blog = await client.blog.findFirst({
+      where: { id: blogId },
+      include: { sections: true }
+    });
+    if (blog) {
+      return blog.slug;
+    }
+    throw new Error('Unexpected blog slug');
+  } else {
+    return slug;
+  }
+};
+
 export const checkSectionParam = (
   blog: Partial<Pick<prisma.Blog, 'body' | 'title'>>,
   partial: boolean
@@ -58,54 +74,76 @@ export const checkSectionParam = (
 export const get = handleRequest<{
   PathParams: { blogId: string };
   Output: { blog: null | (prisma.Blog & { sections: prisma.BlogSection[] }) };
-}>(null, async ({ params: { blogId: slug } }) => {
-  const id = parseInt(slug);
-  if (!isFinite(id)) {
+  CacheField: 'slug';
+}>(
+  null,
+  async ({ params: { blogId: slug } }) => {
+    const id = parseInt(slug);
     return {
       body: {
-        blog: await client.blog.findFirst({ where: { slug }, include: { sections: true } })
+        blog: await client.blog.findFirst({
+          where: isFinite(id) ? { id } : { slug },
+          include: { sections: true }
+        })
       }
     };
+  },
+  {
+    action: 'read',
+    outputType: 'blogs',
+    fields: ['slug'],
+    getCacheProps: async ({ params: { blogId: slug } }) => ({ slug: await getBlogSlug(slug) })
   }
-
-  return {
-    body: {
-      blog: await client.blog.findUnique({ where: { id }, include: { sections: true } })
-    }
-  };
-});
+);
 
 export const patch = handleRequest<{
   PathParams: { blogId: string };
   Body: { blog: Partial<prisma.Blog> };
   Output: { blog: prisma.Blog };
-}>('admin', async ({ params: { blogId: id }, request }) => {
-  const {
-    blog: { body, title }
-  } = await request.json();
+  CacheField: 'slug';
+}>(
+  'admin',
+  async ({ params: { blogId: id }, request }) => {
+    const {
+      blog: { body, title }
+    } = await request.json();
 
-  const errors = checkSectionParam({ body, title }, true);
+    const errors = checkSectionParam({ body, title }, true);
 
-  if (errors.length) {
-    throw HttpCode.badRequest(errors);
-  }
-
-  const data = objectRemoveUndefined({ body, title });
-
-  return {
-    body: {
-      blog: await client.blog.update({
-        where: { id: parseInt(id) },
-        data
-      })
+    if (errors.length) {
+      throw HttpCode.badRequest(errors);
     }
-  };
-});
 
-export const del = handleRequest<{ PathParams: { blogId: string } }>(
+    const data = objectRemoveUndefined({ body, title });
+
+    return {
+      body: {
+        blog: await client.blog.update({
+          where: { id: parseInt(id) },
+          data,
+          include: { sections: true }
+        })
+      }
+    };
+  },
+  {
+    action: 'replace',
+    outputType: 'blogs',
+    fields: ['slug'],
+    getCacheProps: async ({ params: { blogId: slug } }) => ({ slug: await getBlogSlug(slug) })
+  }
+);
+
+export const del = handleRequest<{ PathParams: { blogId: string }; CacheField: 'slug' }>(
   'admin',
   async ({ params: { blogId: id } }) => {
     await client.blog.delete({ where: { id: parseInt(id) } });
     throw HttpCode.noContent();
+  },
+  {
+    action: 'remove',
+    outputType: 'blogs',
+    fields: ['slug'],
+    getCacheProps: async ({ params: { blogId: slug } }) => ({ slug: await getBlogSlug(slug) })
   }
 );

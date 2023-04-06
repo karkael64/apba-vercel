@@ -2,7 +2,7 @@
   import type { Load } from '@sveltejs/kit';
   export const load: Load = async ({ params: { slug }, fetch }) => {
     const req = await fetch(`/api/blogs/${slug}`);
-    if (!req.ok) {
+    if (req.ok) {
       try {
         const { blog } = await req.json();
         return { props: { blog } };
@@ -21,10 +21,9 @@
   blog?.sections.sort((a, b) => a.order - b.order);
 </script>
 
-<div>
-  {#if blog?.title}<h3>{blog?.title}</h3>{/if}
-  {#if blog?.body}<p>{blog?.body}</p>{/if}
-</div>
+<svelte:head>
+  <title>APBA - {blog?.title}</title>
+</svelte:head>
 
 {#if blog?.sections}
   {#each blog.sections as section (section.id)}

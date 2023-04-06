@@ -34,3 +34,9 @@
   <TextField type="text" name="height" label="Hauteur" bind:value="{height}" />
   <TextField type="text" name="variant" label="Variant" bind:value="{variant}" />
 </EditorModal>
+
+<style>
+  hr {
+    border-color: var(--medium);
+  }
+</style>

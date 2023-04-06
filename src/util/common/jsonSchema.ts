@@ -17,6 +17,7 @@ export const shouldBe = (obj: AnyObject, schema: JSONSchema7): boolean => {
 };
 
 export const expectString = (): JSONSchema7 => ({ type: 'string' });
+export const expectNumber = (): JSONSchema7 => ({ type: 'number' });
 export const expectBetween = (anyOf: (string | number | boolean | null)[]): JSONSchema7 => ({
   enum: anyOf
 });

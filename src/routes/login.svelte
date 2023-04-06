@@ -36,7 +36,6 @@
   };
 
   onMount(async () => {
-    console.log('test');
     const userAuthReq = await fetch('/api/auth/login');
     if (userAuthReq.ok) {
       const userAuth = await userAuthReq.json();

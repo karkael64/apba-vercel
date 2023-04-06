@@ -30,7 +30,7 @@ export const get = handleRequest<{
   {
     outputType: 'events',
     fields: ['id'],
-    getCacheProps: (_, { params: { id } }) => ({ id })
+    getCacheProps: ({ params: { id } }) => ({ id })
   }
 );
 

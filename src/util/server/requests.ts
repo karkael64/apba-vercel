@@ -65,6 +65,18 @@ const isBadRequestParam = (el: unknown): el is BadRequestParam =>
 const isBadRequestParamList = (el: unknown): el is BadRequestParam[] =>
   Array.isArray(el) && !el.find((item) => !isBadRequestParam(item));
 
+const appendHeader = (response: RequestHandlerOutput<any>, field: string, value: string) => {
+  if (response.headers) {
+    if (response.headers instanceof Headers) {
+      response.headers.append(field, value);
+    } else if (isObject(response.headers)) {
+      response.headers[field] = value;
+    }
+  } else {
+    response.headers = { [field]: value };
+  }
+};
+
 export class HttpCode extends Error {
   public code;
 
@@ -101,8 +113,8 @@ export class HttpCode extends Error {
 type OutputError = { message: string; errors?: BadRequestParam[] };
 
 type AuthorizeCallback<Params extends AnyObject, SearchParams extends AnyObject, Body> = (
-  auth: ConnectedUser | null,
-  event: RequestEvent<Params, SearchParams, Body>
+  event: RequestEvent<Params, SearchParams, Body>,
+  auth: ConnectedUser | null
 ) => boolean;
 
 type CachePropsCallback<
@@ -111,9 +123,21 @@ type CachePropsCallback<
   SearchParams extends AnyObject,
   Body
 > = (
-  auth: ConnectedUser | null,
-  event: RequestEvent<Params, SearchParams, Body>
-) => AnyObject<F, string>;
+  event: RequestEvent<Params, SearchParams, Body>,
+  auth: ConnectedUser | null
+) => AnyObject<F, string> | Promise<AnyObject<F, string>>;
+
+type CacheInvalidate = {
+  outputType: string;
+  props: AnyObject<string, string>;
+};
+
+type CacheInvalidateCallback<Params extends AnyObject, SearchParams extends AnyObject, Body> = (
+  event: RequestEvent<Params, SearchParams, Body>,
+  auth: ConnectedUser | null
+) => CacheInvalidate[] | Promise<CacheInvalidate[]>;
+
+type CacheSettingsAction = 'read' | 'remove' | 'replace';
 
 type CacheSettings<
   F extends string | undefined,
@@ -121,20 +145,134 @@ type CacheSettings<
   SearchParams extends AnyObject,
   Body
 > = {
-  outputType: string;
+  outputType?: string;
   fields?: readonly F[];
   getCacheProps?: F extends string ? CachePropsCallback<F, Params, SearchParams, Body> : never;
-  shouldRemove?: boolean;
+  invalidateCaches?: CacheInvalidateCallback<Params, SearchParams, Body>;
+  action?: CacheSettingsAction;
+};
+
+const readParams = async <
+  Config extends {
+    PathParams?: AnyObject;
+    SearchParams?: AnyObject;
+    Body?: AnyObject;
+    Output?: unknown;
+    CacheField?: string;
+  }
+>(
+  rawEvent: RequestEvent<
+    Config['PathParams'] & AnyObject,
+    Config['SearchParams'] & AnyObject,
+    Config['Body']
+  >,
+  logState: null | keyof typeof authorizeMap,
+  cacheSettings?: CacheSettings<
+    Config['CacheField'],
+    Config['PathParams'] & AnyObject,
+    Config['SearchParams'] & AnyObject,
+    Config['Body']
+  >
+) => {
+  const searchParams = Array.from(rawEvent.url.searchParams.keys()).reduce((acc, key) => {
+    acc[key] = tryParseJson(rawEvent.url.searchParams.get(key) ?? '');
+    return acc;
+  }, {} as AnyObject);
+  const event = Object.assign({}, rawEvent, { searchParams });
+  let userAuthentication: ConnectedUser | null = null;
+  if (cacheSettings?.getCacheProps || cacheSettings?.invalidateCaches || logState) {
+    userAuthentication = await getConnectedUser(rawEvent.locals.userid);
+  }
+
+  return { event, userAuthentication };
+};
+
+const invalidateCache = async (targetCache: CacheInvalidate) => {
+  const cache = await makeCache(
+    targetCache.outputType,
+    Object.keys(targetCache.props),
+    targetCache.props
+  );
+  await cache.remove();
+};
+
+const getMathingCache = async <
+  Config extends {
+    PathParams?: AnyObject;
+    SearchParams?: AnyObject;
+    Body?: AnyObject;
+    Output?: unknown;
+    CacheField?: string;
+  }
+>(
+  event: RequestEvent<
+    Config['PathParams'] & AnyObject,
+    Config['SearchParams'] & AnyObject,
+    Config['Body']
+  >,
+  userAuthentication: ConnectedUser | null,
+  cacheSettings?: CacheSettings<
+    Config['CacheField'],
+    Config['PathParams'] & AnyObject,
+    Config['SearchParams'] & AnyObject,
+    Config['Body']
+  >
+) => {
+  let cache: null | CacheHandler<Config['Output']> = null;
+  if (cacheSettings) {
+    const invalidateCacheList = await cacheSettings.invalidateCaches?.(event, userAuthentication);
+    if (invalidateCacheList?.length) {
+      await Promise.all(invalidateCacheList.map(invalidateCache));
+    }
+    if (cacheSettings.outputType && cacheSettings.action) {
+      cache = await makeCache(
+        cacheSettings.outputType,
+        (cacheSettings.fields ?? []) as readonly string[],
+        await cacheSettings.getCacheProps?.(event, userAuthentication)
+      );
+      if (cacheSettings.action === 'read') {
+        const cacheData: Config['Output'] | null = await cache.read();
+        return { cache, cacheData };
+      }
+    }
+  }
+  return { cache, cacheData: null };
+};
+
+const manageHttpCode = (httpCode: HttpCode) => {
+  const code = httpCode.code;
+  const message = httpCode.message;
+  const cause = httpCode.cause;
+  if (code === 302 && isString(cause)) {
+    return {
+      status: 302,
+      headers: { location: cause },
+      body: { message }
+    };
+  }
+  if (code === 400 && isBadRequestParamList(cause)) {
+    return {
+      status: 400,
+      body: {
+        message,
+        errors: cause
+      }
+    };
+  }
+  return {
+    status: code,
+    body: { message }
+  };
 };
 
 const authorizeMap: Record<
   'logged' | 'self' | 'admin',
   AuthorizeCallback<AnyObject, AnyObject, unknown>
 > = {
-  logged: (auth) => !!auth,
-  self: (auth, event) =>
+  logged: (_, auth) => !!auth,
+  self: (event, auth) =>
     (!!auth && event.params.uid === auth.user.id) || auth?.user.level.name === 'admin',
-  admin: (auth) => auth?.user.level.name === 'admin'
+  admin: (_, auth) => auth?.user.level.name === 'admin'
 };
 
 export const handleRequest =
@@ -162,75 +300,54 @@ export const handleRequest =
     >
   ) =>
   async (
-    event: RequestEvent<
+    rawEvent: RequestEvent<
       Config['PathParams'] & AnyObject,
       Config['SearchParams'] & AnyObject,
       Config['Body']
     >
   ): Promise<RequestHandlerOutput<Config['Output'] | OutputError>> => {
     try {
-      const searchParams = Array.from(event.url.searchParams.keys()).reduce((acc, key) => {
-        acc[key] = tryParseJson(event.url.searchParams.get(key) ?? '');
-        return acc;
-      }, {} as AnyObject);
-      const eventWithParams = Object.assign({}, event, { searchParams });
-      let userAuth: ConnectedUser | null = null;
-      if (cacheSettings?.getCacheProps || logState) {
-        userAuth = await getConnectedUser(event.locals.userid);
+      const { event, userAuthentication } = await readParams(rawEvent, logState, cacheSettings);
+      const { cache, cacheData } = await getMathingCache(event, userAuthentication, cacheSettings);
+      if (cache && cacheData && cacheSettings?.action === 'read') {
+        const response = { body: cacheData } as RequestHandlerOutput<Config['Output']>;
+        appendHeader(response, 'x-cache-action', `load; lastUpdateAt=${cache.updatedAt}`);
+        return response;
       }
-      let cache: null | CacheHandler = null;
-      if (cacheSettings) {
-        cache = makeCache(
-          cacheSettings.outputType,
-          (cacheSettings.fields ?? []) as readonly string[],
-          cacheSettings.getCacheProps?.(userAuth, eventWithParams) ??
-            ({} as AnyObject<Config['CacheField'] & string, string>)
-        );
-        const cacheData = (await cache.read()) as Config['Output'] | null;
-        if (cacheData) {
-          return { body: cacheData } as RequestHandlerOutput<Config['Output']>;
-        }
-      }
+
+      // verify authorization
       if (logState) {
-        const verifyAuth = authorizeMap[logState];
-        if (!verifyAuth?.(userAuth, eventWithParams)) throw HttpCode.forbidden();
+        const verifyAuthorization = authorizeMap[logState];
+        if (!verifyAuthorization?.(event, userAuthentication)) throw HttpCode.forbidden();
       }
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const output = await fn(eventWithParams, userAuth!);
-      if (cache) {
-        if (cacheSettings?.shouldRemove) {
+
+      // execute handler
+      const output = await fn(event, userAuthentication);
+
+      // write cache for next same request
+      if (cacheSettings && cache) {
+        if (cacheSettings?.action === 'remove') {
+          appendHeader(output, 'x-cache-action', `remove; lastUpdateAt=${cache.updatedAt}`);
           await cache.remove();
-        } else {
+        } else if (output.body) {
+          if (cache.exists) {
+            appendHeader(output, 'x-cache-action', `replace; lastUpdateAt=${cache.updatedAt}`);
+          } else {
+            appendHeader(output, 'x-cache-action', 'create');
+          }
           await cache.write(output.body);
         }
       }
+
+      // send
       return output;
     } catch (error) {
+      // expected errors are managed for sending a valid output
       if (error instanceof HttpCode) {
-        const code = error.code;
-        const message = error.message;
-        const cause = error.cause;
-        if (code === 302 && isString(cause)) {
-          return {
-            status: 302,
-            headers: { location: cause },
-            body: { message }
-          };
-        }
-        if (code === 400 && isBadRequestParamList(cause)) {
-          return {
-            status: 400,
-            body: {
-              message,
-              errors: cause
-            }
-          };
-        }
-        return {
-          status: code,
-          body: { message }
-        };
+        return manageHttpCode(error);
       }
+
+      // unexpected errors always send a server error
       return {
         status: 500,
         body: { message: `${error}` }

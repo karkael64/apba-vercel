@@ -16,6 +16,7 @@ export {
   expectBetween,
   expectString,
   expectStringList,
+  expectNumber,
   hasErrors,
   isValid,
   shouldBe,

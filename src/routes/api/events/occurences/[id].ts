@@ -32,7 +32,7 @@ export const get = handleRequest<{
   {
     outputType: 'eventOccurences',
     fields: ['id'],
-    getCacheProps: (_, { params: { id } }) => ({ id })
+    getCacheProps: ({ params: { id } }) => ({ id })
   }
 );
 
@@ -68,7 +68,7 @@ export const patch = handleRequest<{
       }
     };
   },
-  { outputType: 'eventOccurences', shouldRemove: true }
+  { outputType: 'eventOccurences', action: 'remove' }
 );
 
 export const del = handleRequest<{ PathParams: { id: string } }>(
@@ -77,5 +77,5 @@ export const del = handleRequest<{ PathParams: { id: string } }>(
     await client.eventOccurence.delete({ where: { id: parseInt(id) } });
     throw HttpCode.noContent();
   },
-  { outputType: 'eventOccurences', shouldRemove: true }
+  { outputType: 'eventOccurences', action: 'remove' }
 );

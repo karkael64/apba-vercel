@@ -42,7 +42,7 @@ export const get = handleRequest<{
   {
     outputType: 'eventOccurences',
     fields: ['start', 'end'],
-    getCacheProps: (_, { searchParams: { end, start } }) => ({
+    getCacheProps: ({ searchParams: { end, start } }) => ({
       start: isDate(start) ? new Date(start).toJSON() : 'all',
       end: isDate(end) ? new Date(end).toJSON() : 'all'
     })
@@ -190,5 +190,5 @@ export const post = handleRequest<{
     });
     throw HttpCode.redirect(`/api/events/occurences/${id}`);
   },
-  { outputType: 'eventOccurences', shouldRemove: true }
+  { outputType: 'eventOccurences', action: 'remove' }
 );

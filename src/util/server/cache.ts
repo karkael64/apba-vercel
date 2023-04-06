@@ -2,11 +2,13 @@ import fs from 'fs/promises';
 import path from 'path';
 import { isString, type AnyObject } from '../common';
 
-export type CacheHandler = {
+export type CacheHandler<R> = {
   filePath: string;
-  write: (input: unknown) => Promise<void>;
-  read: () => Promise<unknown | null>;
+  write: (input: R) => Promise<void>;
+  read: () => Promise<R | null>;
   remove: () => Promise<void>;
+  exists: boolean;
+  updatedAt: number;
 };
 
 const propsToChunkPath = (
@@ -31,11 +33,13 @@ const propsToChunkPath = (
 
 const fileExists = async (filePath: string) => {
   try {
-    return (await fs.lstat(filePath)).isFile();
+    const stat = await fs.lstat(filePath);
+    return { exists: stat.isFile(), updatedAt: stat.mtime.valueOf() };
   } catch {
-    return false;
+    return { exists: false, updatedAt: 0 };
   }
 };
+
 const directoryExists = async (filePath: string) => {
   try {
     return (await fs.lstat(filePath)).isDirectory();
@@ -44,11 +48,11 @@ const directoryExists = async (filePath: string) => {
   }
 };
 
-export const makeCache = <F extends string>(
+export const makeCache = async <F extends string, R>(
   outputType: string,
   fields: readonly F[],
-  props: AnyObject<F, string>
-): CacheHandler => {
+  props = {} as AnyObject<F, string>
+): Promise<CacheHandler<R>> => {
   const filePath = path.resolve(
     'node_modules',
     '.cache',
@@ -56,19 +60,22 @@ export const makeCache = <F extends string>(
     'index.json'
   );
   const dirPath = path.dirname(filePath);
+  const { exists, updatedAt } = await fileExists(filePath);
 
   const write = async (input: unknown) => {
-    if (!(await directoryExists(dirPath))) {
+    if (!exists && !(await directoryExists(dirPath))) {
       await fs.mkdir(dirPath, { recursive: true });
     }
     const file = await fs.open(filePath, 'w');
     await file.appendFile(JSON.stringify(input));
     await file.close();
+    result.exists = true;
+    result.updatedAt = Date.now();
   };
 
   const read = async () => {
     try {
-      if (await fileExists(filePath)) {
+      if (exists) {
         const file = await fs.open(filePath, 'r');
         const content = await file.readFile();
         await file.close();
@@ -81,8 +88,11 @@ export const makeCache = <F extends string>(
   };
 
   const remove = async () => {
-    await fs.rm(path.dirname(dirPath), { recursive: true, force: true });
+    if (exists) {
+      await fs.rm(path.dirname(dirPath), { recursive: true, force: true });
+    }
   };
 
-  return { filePath, write, read, remove };
+  const result: CacheHandler<R> = { filePath, write, read, remove, exists, updatedAt };
+  return result;
 };

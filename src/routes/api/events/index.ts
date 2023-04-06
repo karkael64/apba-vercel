@@ -40,7 +40,7 @@ export const get = handleRequest<{
   {
     outputType: 'events',
     fields: ['start', 'end'],
-    getCacheProps: (_, { searchParams: { end, start } }) => ({
+    getCacheProps: ({ searchParams: { end, start } }) => ({
       start: isDate(start) ? new Date(start).toJSON() : 'all',
       end: isDate(end) ? new Date(end).toJSON() : 'all'
     })
