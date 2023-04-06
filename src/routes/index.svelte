@@ -12,6 +12,7 @@
         // do nothing
       }
     }
+    console.error(req, await req.text());
     return { error: 'Error', status: 500 };
   };
 </script>
